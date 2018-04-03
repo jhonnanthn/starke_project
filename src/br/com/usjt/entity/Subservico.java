@@ -23,6 +23,10 @@ public class Subservico {
 	@JoinColumn(name="id_servico")
 	private Servico servico;
 	
+	@Column(name="ordem")
+	@NotNull
+	private int ordem;
+	
 	@Column(name="nome")
 	@NotNull
 	private String nome;
@@ -45,4 +49,15 @@ public class Subservico {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
+	public int getOrdem() {
+		return ordem;
+	}
+	public void setOrdem(int ordem) {
+		this.ordem = ordem;
+	}
+	@Override
+	public String toString() {
+		return "Subservico [id=" + id + ", servico=" + servico + ", ordem=" + ordem + ", nome=" + nome + "]";
+	}
+	
 }
