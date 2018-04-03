@@ -40,6 +40,7 @@ public class SenhaDAO {
 		senha.setNome(novoNome);
 		Date date = new Date();
 		senha.setDataEntrada(date);
+		senha.setStatus("ativo");
 		manager.persist(senha);
 		
 	}

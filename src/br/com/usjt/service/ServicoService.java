@@ -11,14 +11,18 @@ import br.com.usjt.entity.Servico;
 @Service
 public class ServicoService {
 
-	private ServicoDAO serviceDAO;
+	private ServicoDAO servicoDAO;
 	
 	@Autowired
 	public ServicoService(ServicoDAO serviceDAO) {
-		this.serviceDAO = serviceDAO;
+		this.servicoDAO = serviceDAO;
 	}
 	
 	public List<Servico> listarServicos() {
-		return serviceDAO.listarServicos();
+		return servicoDAO.listarServicos();
+	}
+
+	public Servico loadServico(String idServico) {
+		return servicoDAO.loadServico(idServico);
 	}
 }

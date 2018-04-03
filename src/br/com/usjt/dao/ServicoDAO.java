@@ -21,4 +21,8 @@ public class ServicoDAO {
 	public List<Servico> listarServicos() {
 		return manager.createQuery("select c from Servico c").getResultList();
 	}
+
+	public Servico loadServico(String idServico) {
+		return manager.find(Servico.class, idServico);
+	}
 }

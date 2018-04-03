@@ -8,12 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import br.com.usjt.entity.Senha;
 import br.com.usjt.entity.Servico;
 import br.com.usjt.entity.Subservico;
 import br.com.usjt.service.SenhaService;
 import br.com.usjt.service.ServicoService;
+import br.com.usjt.service.SubservicoService;
 
 /**
  * 
@@ -25,11 +27,13 @@ import br.com.usjt.service.ServicoService;
 public class GeneratorController {
 	SenhaService senhaService;
 	ServicoService servicoService;
+	SubservicoService subservicoService;
 	
 	@Autowired
-	public GeneratorController(SenhaService senhaService, ServicoService servicoService) {
+	public GeneratorController(SenhaService senhaService, ServicoService servicoService, SubservicoService subservicoService) {
 		this.senhaService = senhaService;
 		this.servicoService = servicoService;
+		this.subservicoService = subservicoService;
 	}
 
 	/**
@@ -53,21 +57,17 @@ public class GeneratorController {
 		}
 	}
 	
-	@RequestMapping("/gerar_senha")
-	public String gerarSenha(Model model) {
+	@RequestMapping("/senha_gerar")
+	public String gerarSenha(@RequestParam(name="senha_tipo") String tipo, @RequestParam(name="senha_servico") String idServico,Model model) {
 		try {
 			Senha senha = new Senha();
-			Servico servico = new Servico();
-			servico.setId("RG");
+			Servico servico = servicoService.loadServico(idServico);
 			senha.setServico(servico);
-			Subservico subservico = new Subservico();
-			subservico.setId(1);
-			subservico.setOrdem(1);
-			subservico.setServico(servico);
-			subservico.setNome("Tirar foto");
+			Subservico subservico = subservicoService.loadSubservico(idServico,1);
 			senha.setSubservico(subservico);
-			senha.setTipo("comum");
-			senha.setStatus("ativo");
+			senha.setTipo(tipo);
+			
+			
 			senhaService.gerarSenha(senha); 
 			return "gerar";
 		} catch (Exception e) {
