@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import br.com.usjt.entity.Senha;
 import br.com.usjt.entity.Servico;
+import br.com.usjt.entity.Subservico;
 import br.com.usjt.service.SenhaService;
 import br.com.usjt.service.ServicoService;
 
@@ -57,8 +58,14 @@ public class GeneratorController {
 		try {
 			Senha senha = new Senha();
 			Servico servico = new Servico();
-			servico.setId("XX");
+			servico.setId("RG");
 			senha.setServico(servico);
+			Subservico subservico = new Subservico();
+			subservico.setId(1);
+			subservico.setOrdem(1);
+			subservico.setServico(servico);
+			subservico.setNome("Tirar foto");
+			senha.setSubservico(subservico);
 			senha.setTipo("comum");
 			senha.setStatus("ativo");
 			senhaService.gerarSenha(senha); 

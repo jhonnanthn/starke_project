@@ -1,6 +1,5 @@
 package br.com.usjt.dao;
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -16,27 +15,32 @@ import br.com.usjt.entity.Senha;
 public class SenhaDAO {
 	@PersistenceContext
 	EntityManager manager;
-
+	@SuppressWarnings("unchecked")
 	public void gerarSenha(Senha senha) {
-		List<Senha> list = manager.createQuery("select s from Senha s").getResultList();
+		Query query = manager.createQuery("select s from Senha s where id_servico = :id_servico");
+		query.setParameter("id_servico", senha.getServico().getId());
+		List<Senha> list = query.getResultList();
 		
+		String idServico = senha.getServico().getId();
+		String novoNome;
 		if (!list.isEmpty()) {
 			String lastNome = list.get(list.size()-1).getNome();
-			System.out.println(lastNome.substring(2));
-		}else
-			System.out.println("lastNome é nulo");
-		//		List<Senha> senhas =  manager.createQuery("select s from senha s where s.id = last_insert_id()").getResultList();
-//		System.out.println(x.toString());  
-//		Senha lastSenha = manager.find(Senha.class, last);
-//		int ultimoNome = Integer.parseInt(lastSenha.getNome().substring(2));
-//		System.out.println(ultimoNome); 
-//		
-//		
-//		Date date = new Date();
-//		senha.setDataEntrada(date);
-//		
-//		
-//		manager.persist(senha);
+			int n = Integer.parseInt(lastNome.substring(2))+1;
+			if (n>999) {
+				novoNome = idServico+"001";
+			}else {
+				String nFormatado = String.format("%03d", n);
+				novoNome = idServico+nFormatado;
+			}
+			
+		}else{
+			novoNome = idServico+"001";
+		}
+			
+		senha.setNome(novoNome);
+		Date date = new Date();
+		senha.setDataEntrada(date);
+		manager.persist(senha);
 		
 	}
 }
