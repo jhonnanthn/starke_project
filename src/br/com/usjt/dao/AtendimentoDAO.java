@@ -15,8 +15,9 @@ public class AtendimentoDAO {
 	public void gerarAtendimento(Atendimento atendimento) {
 		manager.persist(atendimento);		
 	}
-	]public void loadAtendimento(Atendimento atendimento) {
-		manager.find(Atendiment.class, atendimento.getId());		
+	
+	public void loadAtendimento(Atendimento atendimento) {
+		manager.find(Atendimento.class, atendimento.getId());		
 	}
 
 }

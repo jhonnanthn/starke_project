@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
@@ -17,22 +18,21 @@ public class Atendimento {
 	@Id
 	@NotNull
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	int id;
-	@Column(name="id_senha")
-	@OneToOne
+	private int id;
+	@ManyToOne
 	@NotNull
 	@JoinColumn(name="id_senha")
-	Senha senha;
-	@Column(name="id_subservico")
+	private Senha senha;
 	@NotNull
-	@OneToMany
-	Subservico subservico;
+	@ManyToOne
+	@JoinColumn(name="id_subservico")
+	private Subservico subservico;
 	@Column(name="data_entrada")
-	Date dataEntrada;
+	private Date dataEntrada;
 	@Column(name="data_saida")
-	Date dataSaida;
+	private Date dataSaida;
 	@Column(name="duracao")
-	int duracao;
+	private int duracao;
 	public int getId() {
 		return id;
 	}
