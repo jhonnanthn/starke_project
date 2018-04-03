@@ -32,7 +32,7 @@
 				<div class="form-group">
 				<label for="senha_servico">Serviço:</label>
 					<select class="form-control" name="senha_servico" id="senha_servico">
-                        <option value="">Selecione um serviço</option>
+                        <option value="" selected disabled>Selecione um serviço</option>
                         <c:forEach var="servicos" items="${servicos}">
                             <option value="${servicos.id}">${servicos.nome}</option>
                         </c:forEach>

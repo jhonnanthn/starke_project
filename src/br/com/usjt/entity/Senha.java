@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
 @Table(name="senha")
 public class Senha {
 	@Id
-	@Column(name="ID")
+	@Column(name="id")
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 	@NotNull
@@ -27,10 +27,7 @@ public class Senha {
 	@ManyToOne
 	@JoinColumn(name="id_subservico")
 	private Subservico subservico;
-	@NotNull
-	@ManyToOne
-	@JoinColumn(name="id_fila")
-	private Fila fila;
+
 	
 	@Column(name="tipo")
 	private String tipo;
@@ -60,12 +57,6 @@ public class Senha {
 	}
 	public void setServico(Servico servico) {
 		this.servico = servico;
-	}
-	public Fila getFila() {
-		return fila;
-	}
-	public void setFila(Fila fila) {
-		this.fila = fila;
 	}
 	public String getTipo() {
 		return tipo;
@@ -97,4 +88,11 @@ public class Senha {
 	public void setDataSaida(Date dataSaida) {
 		this.dataSaida = dataSaida;
 	}
+	@Override
+	public String toString() {
+		return "Senha [id=" + id + ", servico=" + servico + ", subservico=" + subservico + ", tipo=" + tipo + ", nome="
+				+ nome + ", status=" + status + ", dataEntrada=" + dataEntrada + ", dataSaida=" + dataSaida + "]";
+	}
+	
+	
 }

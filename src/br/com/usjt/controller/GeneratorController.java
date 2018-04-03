@@ -9,8 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import br.com.usjt.entity.Senha;
 import br.com.usjt.entity.Servico;
-import br.com.usjt.service.GeneratorService;
+import br.com.usjt.service.SenhaService;
 import br.com.usjt.service.ServicoService;
 
 /**
@@ -21,12 +22,12 @@ import br.com.usjt.service.ServicoService;
 @Transactional
 @Controller
 public class GeneratorController {
-	GeneratorService generator;
+	SenhaService senhaService;
 	ServicoService servicoService;
 	
 	@Autowired
-	public GeneratorController(GeneratorService generator, ServicoService servicoService) {
-		this.generator = generator;
+	public GeneratorController(SenhaService senhaService, ServicoService servicoService) {
+		this.senhaService = senhaService;
 		this.servicoService = servicoService;
 	}
 
@@ -44,6 +45,23 @@ public class GeneratorController {
 		try {
 			List<Servico> servicos = servicoService.listarServicos();
 			model.addAttribute("servicos", servicos);
+			return "gerar";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "Erro";
+		}
+	}
+	
+	@RequestMapping("/gerar_senha")
+	public String gerarSenha(Model model) {
+		try {
+			Senha senha = new Senha();
+			Servico servico = new Servico();
+			servico.setId("XX");
+			senha.setServico(servico);
+			senha.setTipo("comum");
+			senha.setStatus("ativo");
+			senhaService.gerarSenha(senha); 
 			return "gerar";
 		} catch (Exception e) {
 			e.printStackTrace();

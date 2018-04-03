@@ -12,10 +12,12 @@ import br.com.usjt.entity.Servico;
 @Repository
 public class ServicoDAO {
 	@PersistenceContext
-	EntityManager manager;public ServicoDAO() {
+	EntityManager manager;
+	public ServicoDAO() {
 		// TODO Auto-generated constructor stub
 	}
 		
+	@SuppressWarnings("unchecked")
 	public List<Servico> listarServicos() {
 		return manager.createQuery("select c from Servico c").getResultList();
 	}

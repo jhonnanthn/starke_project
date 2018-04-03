@@ -7,9 +7,7 @@ http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
 		<!-- provedor/implementacao do JPA -->
 		<provider>org.hibernate.ejb.HibernatePersistence</provider> 
 		<!-- entidade mapeada -->
-		<class>br.com.usjt.entity.Fila</class>
 		<class>br.com.usjt.entity.Senha</class>
-		<class>br.com.usjt.entity.Servico</class>
 		<class>br.com.usjt.entity.Servico</class>
 		<class>br.com.usjt.entity.Subservico</class>
 		<properties>
