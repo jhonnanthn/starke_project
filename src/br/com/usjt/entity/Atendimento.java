@@ -9,11 +9,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 @Entity
+@Table(name="atendimento")
 public class Atendimento {
 	@Id
 	@NotNull
@@ -23,8 +23,8 @@ public class Atendimento {
 	@NotNull
 	@JoinColumn(name="id_senha")
 	private Senha senha;
-	@NotNull
 	@ManyToOne
+	@NotNull
 	@JoinColumn(name="id_subservico")
 	private Subservico subservico;
 	@Column(name="data_entrada")

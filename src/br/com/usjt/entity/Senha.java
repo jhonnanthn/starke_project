@@ -16,6 +16,7 @@ import javax.validation.constraints.NotNull;
 @Table(name="senha")
 public class Senha {
 	@Id
+	@NotNull
 	@Column(name="id")
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;

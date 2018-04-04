@@ -10,9 +10,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import br.com.usjt.entity.Atendimento;
 import br.com.usjt.entity.Senha;
 import br.com.usjt.entity.Servico;
 import br.com.usjt.entity.Subservico;
+import br.com.usjt.service.AtendimentoService;
 import br.com.usjt.service.SenhaService;
 import br.com.usjt.service.ServicoService;
 import br.com.usjt.service.SubservicoService;
@@ -28,12 +30,14 @@ public class GeneratorController {
 	SenhaService senhaService;
 	ServicoService servicoService;
 	SubservicoService subservicoService;
+	AtendimentoService atendimentoService;
 	
 	@Autowired
-	public GeneratorController(SenhaService senhaService, ServicoService servicoService, SubservicoService subservicoService) {
+	public GeneratorController(SenhaService senhaService, ServicoService servicoService, SubservicoService subservicoService,AtendimentoService atendimentoService) {
 		this.senhaService = senhaService;
 		this.servicoService = servicoService;
 		this.subservicoService = subservicoService;
+		this.atendimentoService = atendimentoService;
 	}
 
 	/**
@@ -66,9 +70,12 @@ public class GeneratorController {
 			Subservico subservico = subservicoService.loadSubservico(idServico,1);
 			senha.setSubservico(subservico);
 			senha.setTipo(tipo);
+			Atendimento atendimento = new Atendimento();
+			atendimento.setSenha(senha);
+			atendimento.setSubservico(subservico);
+			senhaService.gerarSenha(senha);
+			atendimentoService.gerarAtendimento(atendimento);
 			
-			
-			senhaService.gerarSenha(senha); 
 			return "gerar";
 		} catch (Exception e) {
 			e.printStackTrace();
