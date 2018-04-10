@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.usjt.dao.AtendimentoDAO;
 import br.com.usjt.entity.Atendimento;
+import br.com.usjt.entity.Senha;
 @Service
 public class AtendimentoService {
 	private AtendimentoDAO atendimentoDAO;
@@ -17,7 +18,10 @@ public class AtendimentoService {
 		atendimentoDAO.gerarAtendimento(atendimento);
 	}
 	
-	public void loadAtendimento(Atendimento atendimento) {
-		atendimentoDAO.loadAtendimento(atendimento);
+	public Atendimento loadAtendimento(Senha senha) {
+		return atendimentoDAO.loadAtendimento(senha);
+	}
+	public void updateAtendimento(Atendimento atendimento) {
+		atendimentoDAO.updateAtendimento(atendimento);
 	}
 }

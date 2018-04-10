@@ -1,5 +1,6 @@
 package br.com.usjt.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -18,6 +19,7 @@ import br.com.usjt.service.AtendimentoService;
 import br.com.usjt.service.SenhaService;
 import br.com.usjt.service.ServicoService;
 import br.com.usjt.service.SubservicoService;
+
 
 /**
  * 
@@ -82,4 +84,26 @@ public class GeneratorController {
 			return "Erro";
 		}
 	}
+	
+	@RequestMapping("/senha_atender")
+	public String atenderSenha(@RequestParam(name="id") int id,Model model) {
+		try {
+			Senha senha = senhaService.loadSenha(id);
+			senha.setStatus("atendimento");
+			senhaService.updateSenha(senha);
+			
+			Atendimento atendimento = atendimentoService.loadAtendimento(senha);
+			atendimento.setDataEntrada(new Date());
+			long x = (atendimento.getDataEntrada().getTime()-atendimento.getDataGerado().getTime())/1000;
+			atendimento.setEspera((int) x/60);
+			atendimentoService.updateAtendimento(atendimento);
+			
+			return "gerar";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "Erro";
+		}
+	}
+	
+	
 }

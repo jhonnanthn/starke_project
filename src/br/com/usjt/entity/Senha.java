@@ -40,6 +40,10 @@ public class Senha {
 	private Date dataEntrada;
 	@Column(name="data_saida")
 	private Date dataSaida;
+	@Column(name="estimativa_fila")
+	private Date estimativaFila;
+	@Column(name="estimativa_atendimento")
+	private Date estimativaAtendimento;
 	
 	public Subservico getSubservico() {
 		return subservico;
@@ -89,10 +93,25 @@ public class Senha {
 	public void setDataSaida(Date dataSaida) {
 		this.dataSaida = dataSaida;
 	}
+	
+	public Date getEstimativaFila() {
+		return estimativaFila;
+	}
+	public void setEstimativaFila(Date estimativaFila) {
+		this.estimativaFila = estimativaFila;
+	}
+	public Date getEstimativaAtendimento() {
+		return estimativaAtendimento;
+	}
+	public void setEstimativaAtendimento(Date estimativaAtendimento) {
+		this.estimativaAtendimento = estimativaAtendimento;
+	}
+	
 	@Override
 	public String toString() {
 		return "Senha [id=" + id + ", servico=" + servico + ", subservico=" + subservico + ", tipo=" + tipo + ", nome="
-				+ nome + ", status=" + status + ", dataEntrada=" + dataEntrada + ", dataSaida=" + dataSaida + "]";
+				+ nome + ", status=" + status + ", dataEntrada=" + dataEntrada + ", dataSaida=" + dataSaida
+				+ ", estimativaFila=" + estimativaFila + ", estimativaAtendimento=" + estimativaAtendimento + "]";
 	}
 	
 	

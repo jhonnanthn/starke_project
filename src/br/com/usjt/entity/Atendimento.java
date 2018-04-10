@@ -27,12 +27,17 @@ public class Atendimento {
 	@NotNull
 	@JoinColumn(name="id_subservico")
 	private Subservico subservico;
+	@Column(name="data_gerado")
+	private Date dataGerado;
 	@Column(name="data_entrada")
 	private Date dataEntrada;
 	@Column(name="data_saida")
 	private Date dataSaida;
 	@Column(name="duracao")
 	private int duracao;
+	@Column(name="espera")
+	private int espera;
+	
 	public int getId() {
 		return id;
 	}
@@ -69,10 +74,26 @@ public class Atendimento {
 	public void setDuracao(int duracao) {
 		this.duracao = duracao;
 	}
+	
+	public int getEspera() {
+		return espera;
+	}
+	public void setEspera(int espera) {
+		this.espera = espera;
+	}
+	
+	public Date getDataGerado() {
+		return dataGerado;
+	}
+	public void setDataGerado(Date dataGerado) {
+		this.dataGerado = dataGerado;
+	}
+	
 	@Override
 	public String toString() {
-		return "Atendimento [id=" + id + ", senha=" + senha + ", subservico=" + subservico + ", dataEntrada="
-				+ dataEntrada + ", dataSaida=" + dataSaida + ", duracao=" + duracao + "]";
+		return "Atendimento [id=" + id + ", senha=" + senha + ", subservico=" + subservico + ", dataGerado="
+				+ dataGerado + ", dataEntrada=" + dataEntrada + ", dataSaida=" + dataSaida + ", duracao=" + duracao
+				+ ", espera=" + espera + "]";
 	}
 	public Atendimento() {
 		super();

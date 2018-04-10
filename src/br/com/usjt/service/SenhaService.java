@@ -19,5 +19,14 @@ public class SenhaService {
 	public void gerarSenha(Senha senha) {
 		senhaDAO.gerarSenha(senha);
 	}
+	
+	public Senha loadSenha(int id) {
+		return senhaDAO.loadSenha(id);
+	}
+	
+	public void updateSenha(Senha senha) {
+		senhaDAO.updateSenha(senha);
+	}
+
 
 }
