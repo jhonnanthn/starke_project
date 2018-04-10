@@ -25,18 +25,27 @@ public class SenhaDAO {
 		List<Senha> list = query.getResultList();
 		
 		int horaAtual = new Date().getHours();
-		Query query2 = manager.createQuery("select a from Atendimento a where HOUR(a.dataGerado) > "+(horaAtual-2)+" AND HOUR(a.dataGerado) < "+(horaAtual+2));
+		Query query2 = manager.createQuery("select a from Atendimento a where a.dataEntrada IS NOT NULL");
 		List<Atendimento> atendimentos = query2.getResultList();
 		int sumFila = 0, sumAtendimento = 0;
+		int contA = 0, contB = 0;
 		for (Atendimento a : atendimentos) {
-			if (a.getDataEntrada() != null)
+			if (a.getDataEntrada() != null) {
 				sumFila +=a.getEspera();
-			if (a.getDataSaida() != null)
+				contA++;
+			}
+			if (a.getDataSaida() != null) {
 				sumAtendimento +=a.getDuracao();
+				contB++;
+			}
 		}
+		
+		int mediaFila = sumFila/contA;
+		int mediaAtendimento = sumAtendimento/contB;
+		
 		Calendar cFila  = Calendar.getInstance(), cAtendimento = Calendar.getInstance();
-		cFila.add(Calendar.HOUR_OF_DAY, sumFila);
-		cAtendimento.add(Calendar.HOUR_OF_DAY, sumAtendimento);
+		cFila.add(Calendar.MINUTE, mediaFila);
+		cAtendimento.add(Calendar.MINUTE, mediaAtendimento);
 		String idServico = senha.getServico().getId();
 		
 		senha.setEstimativaFila(cFila.getTime());
@@ -59,7 +68,7 @@ public class SenhaDAO {
 		senha.setNome(novoNome);
 		Date date = new Date();
 		senha.setDataEntrada(date);
-		senha.setStatus("ativo");
+		senha.setStatus("aguardando");
 		manager.persist(senha);
 		
 	}
