@@ -23,6 +23,7 @@ public class AtendimentoDAO {
 	}
 	
 	public Atendimento loadAtendimento(Senha senha) {
+		// Busca baseada no idSenha e idSubservico. Deve apenas existir uma combinação deles no banco
 		Query query = manager.createQuery("select a from Atendimento a where a.subservico.id = :id and a.senha.id = :id2");
 		query.setParameter("id", senha.getSubservico().getId());
 		query.setParameter("id2", senha.getId());

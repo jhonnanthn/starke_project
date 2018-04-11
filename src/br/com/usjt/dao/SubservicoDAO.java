@@ -15,8 +15,7 @@ public class SubservicoDAO {
 
 	public Subservico loadSubservico(String idServico, int ordem) {
 
-		Query query = manager
-				.createQuery("select s from Subservico s where id_servico = :id_servico and s.ordem = :ordem");
+		Query query = manager.createQuery("select s from Subservico s where id_servico = :id_servico and s.ordem = :ordem");
 		query.setParameter("id_servico", idServico);
 		query.setParameter("ordem", ordem);
 		Subservico sServico = (Subservico) query.getSingleResult();

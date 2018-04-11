@@ -19,13 +19,17 @@ public class SenhaDAO {
 	@PersistenceContext
 	EntityManager manager;
 
-	@SuppressWarnings({ "unchecked", "deprecation" })
+	@SuppressWarnings({ "unchecked" })
 	public void gerarSenha(Senha senha) {
+		
+		// Query para buscar o ultimo nome
 		Query query = manager.createQuery("select s from Senha s where id_servico = :id_servico");
 		query.setParameter("id_servico", senha.getServico().getId());
 		List<Senha> list = query.getResultList();
 
 		// int horaAtual = new Date().getHours();
+		
+		// Query para gerar médias de espera na fila e duração do antedimento
 		Query query2 = manager.createQuery("select a from Atendimento a where a.dataEntrada IS NOT NULL");
 		List<Atendimento> atendimentos = query2.getResultList();
 		int sumFila = 0, sumAtendimento = 0;
@@ -43,7 +47,9 @@ public class SenhaDAO {
 
 		int mediaFila = sumFila / contA;
 		int mediaAtendimento = sumAtendimento / contB;
-
+		// Cria Calendar para poder adcionar Minutos facilmente, e depois transforma em Date
+		// Data estimada de Fila = Data Atual + media da fila
+		// Data estimada de Atendimento = Data Atual + media de fila + media de atendimento
 		Calendar cFila = Calendar.getInstance(), cAtendimento = Calendar.getInstance();
 		cFila.add(Calendar.MINUTE, mediaFila);
 		cAtendimento.add(Calendar.MINUTE, mediaFila + mediaAtendimento);
@@ -52,6 +58,8 @@ public class SenhaDAO {
 		senha.setEstimativaFila(cFila.getTime());
 		senha.setEstimativaAtendimento(cAtendimento.getTime());
 		String novoNome;
+		// Caso lista tenha Senhas com o mesmo cod de servico, pega o nome do ultimo,
+		// subtrai as letras, verifica se é o ultimo (999) e então define o próximo nome (numeNovo)
 		if (!list.isEmpty()) {
 			String lastNome = list.get(list.size() - 1).getNome();
 			int n = Integer.parseInt(lastNome.substring(2)) + 1;
@@ -67,8 +75,9 @@ public class SenhaDAO {
 		}
 
 		senha.setNome(novoNome);
-		Date date = new Date();
-		senha.setDataEntrada(date);
+		
+		// DataEntrada e Status são default
+		senha.setDataEntrada(new Date());
 		senha.setStatus("aguardando");
 		manager.persist(senha);
 
@@ -83,22 +92,25 @@ public class SenhaDAO {
 	public void updateSenha(Senha senha) {
 		manager.merge(senha);
 	}
-
+	// Define o que sera feito ao acabar o atendimento; finalizar senha ou enviar para proxima fila.
 	public Senha proximaSenha(Senha senha) {
 		int next = senha.getSubservico().getOrdem() + 1;
 		String idServico = senha.getServico().getId();
+		
+		//utilizada mais tarde para alterar Atendimento
 		int oldSub = senha.getSubservico().getId();
-
+		// Select o próximo subservico de um Servico, se existir, baseado no campo ordem
 		Query query = manager.createQuery(
 				"select s from Subservico s where s.servico.id = :idServico AND s.ordem = :next");
 		query.setParameter("idServico", idServico);
 		query.setParameter("next", next);
 		Subservico subservico = (Subservico) query.getSingleResult();
-		
+		// Se existe, então senha será inserida nesse proximo subservico.
+		//	São alterados Status, idSubservico e inseridas novas estimativas.
 		if (subservico != null) {
 			senha.setStatus("aguardando");
 			senha.setSubservico(subservico);
-			
+			// Denovo essa joça, deveria ser feita num func mas estava com pressa n me julguem
 			Query query2 = manager.createQuery("select a from Atendimento a where a.dataEntrada IS NOT NULL");
 			List<Atendimento> atendimentos = query2.getResultList();
 			int sumFila = 0, sumAtendimento = 0;
@@ -120,21 +132,23 @@ public class SenhaDAO {
 			senha.setEstimativaFila(cFila.getTime());
 			senha.setEstimativaAtendimento(cAtendimento.getTime());
 			
-			
+			// Após passar senha para proximo servico, é gerado o Atendimento do novo estado da Senha
 			Atendimento at = new Atendimento();
 			at.setSenha(senha);
 			at.setSubservico(subservico);
 			at.setDataGerado(new Date());
 			manager.persist(at);
 			
-			
+		// Se não existe proximo, só finaliza a senha atual
 		}else {
 			senha.setStatus("finalizado");
 			senha.setDataSaida(new Date());
 			
 		}
+		//atualiza senha no matter what
 		manager.merge(senha);
 		
+		//finaliza o Atendimento anterior no matter what
 		Query x = manager.createQuery("select a from Atendimento a where a.subservico.id = :id and a.senha.id = :id2");
 		x.setParameter("id", oldSub);
 		x.setParameter("id2", senha.getId());

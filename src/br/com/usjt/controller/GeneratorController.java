@@ -51,6 +51,7 @@ public class GeneratorController {
 		return "index";
 	}
 	
+	// Carrega Servicos
 	@RequestMapping("/criar_senha_gerador")
 	public String criar_senha_gerador(Model model) {
 		try {
@@ -62,7 +63,7 @@ public class GeneratorController {
 			return "Erro";
 		}
 	}
-	
+	//  Cria senha no servico escolhido + subservico de ordem 1 + tipo
 	@RequestMapping("/senha_gerar")
 	public String gerarSenha(@RequestParam(name="senha_tipo") String tipo, @RequestParam(name="senha_servico") String idServico,Model model) {
 		try {
