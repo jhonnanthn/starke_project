@@ -29,4 +29,10 @@ public class SenhaService {
 	}
 
 
+	public Senha proximaSenha(Senha senha) {
+		return senhaDAO.proximaSenha(senha);
+		
+	}
+
+
 }

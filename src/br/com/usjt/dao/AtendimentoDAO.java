@@ -19,7 +19,7 @@ public class AtendimentoDAO {
 
 	public void gerarAtendimento(Atendimento atendimento) {
 		atendimento.setDataGerado(new Date());
-		manager.persist(atendimento);		
+		manager.persist(atendimento);
 	}
 	
 	public Atendimento loadAtendimento(Senha senha) {

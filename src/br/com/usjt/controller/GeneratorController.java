@@ -105,5 +105,18 @@ public class GeneratorController {
 		}
 	}
 	
+	@RequestMapping("/senha_proxima")
+	public String proximaSenha(@RequestParam(name="id") int id,Model model) {
+		try {
+			Senha senha = senhaService.loadSenha(id);
+			senhaService.proximaSenha(senha);
+						
+			return "gerar";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "Erro";
+		}
+	}
+	
 	
 }
