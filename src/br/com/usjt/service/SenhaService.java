@@ -1,5 +1,7 @@
 package br.com.usjt.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,8 +33,10 @@ public class SenhaService {
 
 	public Senha proximaSenha(Senha senha) {
 		return senhaDAO.proximaSenha(senha);
-		
 	}
 
 
+	public List<Senha> listarSenha() {
+		return senhaDAO.listarSenha();
+	}
 }

@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css?family=Abel|Dosis|Lora|Montserrat');
+
+body, html{
+    position: absolute;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
+
+::-webkit-scrollbar {
+    width: 3px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey; 
+    border-radius: 5px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #70b1f1; 
+    border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #1164b7; 
+}
+
+h1,h2,h3,h4,h5h6,p{
+    padding: 0;
+    margin: 0;
+}
+
+ul, li{
+    padding: 0;
+    list-style: none;
+    margin: 0;
+}
+
+header.s-header{
+  position: fixed;
+  height: 100%;
+  background: #231f20;
+  z-index: 2;
+}
+
+header.s-header .s-header-container{
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+header.s-header li{
+    padding: 10px;
+    margin-bottom: 10px;
+    position: relative;
+    cursor: pointer;
+}
+
+header.s-header li a{
+    font-size: 0;
+    color: #fff;
+    outline: none;
+    text-decoration: none;
+    display: block;
+    width: 40px;
+    text-align: center;
+}
+
+header.s-header li a svg{
+    height: 30px;
+    width: 30px;
+    margin: auto;
+}
+header.s-header li a svg path{
+    fill: #ff8c19;
+}
+
+body div.container{
+    position: relative;
+    padding: 0 20px 0 70px;
+    background-color: #f2f2f2;
+}

@@ -1,5 +1,7 @@
 package br.com.usjt.entity;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -45,6 +47,7 @@ public class Senha {
 	@Column(name="estimativa_atendimento")
 	private Date estimativaAtendimento;
 	
+	
 	public Subservico getSubservico() {
 		return subservico;
 	}
@@ -87,6 +90,7 @@ public class Senha {
 	public void setDataEntrada(Date dataEntrada) {
 		this.dataEntrada = dataEntrada;
 	}
+	
 	public Date getDataSaida() {
 		return dataSaida;
 	}
@@ -109,9 +113,11 @@ public class Senha {
 	
 	@Override
 	public String toString() {
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 		return "Senha [id=" + id + ", servico=" + servico + ", subservico=" + subservico + ", tipo=" + tipo + ", nome="
 				+ nome + ", status=" + status + ", dataEntrada=" + dataEntrada + ", dataSaida=" + dataSaida
-				+ ", estimativaFila=" + estimativaFila + ", estimativaAtendimento=" + estimativaAtendimento + "]";
+				+ ", estimativaFila=" + estimativaFila + ", dataEntradaString=" + df.format(dataEntrada)
+				+ ", estimativaAtendimento=" + estimativaAtendimento + "]";
 	}
 	
 	

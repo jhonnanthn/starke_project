@@ -1,5 +1,7 @@
 package br.com.usjt.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,5 +19,9 @@ public class SubservicoService {
 	
 	public Subservico loadSubservico(String idServico, int ordem) {
 		return subservicoDAO.loadSubservico(idServico, ordem);
+	}
+	
+	public List<Subservico> loadSubservico(String idServico) {
+		return subservicoDAO.loadSubservico(idServico);
 	}
 }

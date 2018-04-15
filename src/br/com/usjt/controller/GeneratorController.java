@@ -3,13 +3,17 @@ package br.com.usjt.controller;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.usjt.entity.Atendimento;
 import br.com.usjt.entity.Senha;
@@ -19,13 +23,8 @@ import br.com.usjt.service.AtendimentoService;
 import br.com.usjt.service.SenhaService;
 import br.com.usjt.service.ServicoService;
 import br.com.usjt.service.SubservicoService;
+//TODO FAZER A ESTIMATIVA BASEADA NO TIPO DA SENHA!!!!!!!!
 
-
-/**
- * 
- * @author starke
- *
- */
 @Transactional
 @Controller
 public class GeneratorController {
@@ -52,7 +51,7 @@ public class GeneratorController {
 	}
 	
 	// Carrega Servicos
-	@RequestMapping("/criar_senha_gerador")
+	@RequestMapping("/gerar_senha")
 	public String criar_senha_gerador(Model model) {
 		try {
 			List<Servico> servicos = servicoService.listarServicos();
@@ -60,9 +59,10 @@ public class GeneratorController {
 			return "gerar";
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "Erro";
+			return "erro";
 		}
 	}
+	
 	//  Cria senha no servico escolhido + subservico de ordem 1 + tipo
 	@RequestMapping("/senha_gerar")
 	public String gerarSenha(@RequestParam(name="senha_tipo") String tipo, @RequestParam(name="senha_servico") String idServico,Model model) {
@@ -78,15 +78,16 @@ public class GeneratorController {
 			atendimento.setSubservico(subservico);
 			senhaService.gerarSenha(senha);
 			atendimentoService.gerarAtendimento(atendimento);
-			
+			model.addAttribute("atendimento", atendimento);
+			criar_senha_gerador(model);
 			return "gerar";
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "Erro";
+			return "erro";
 		}
 	}
 	
-	@RequestMapping("/senha_atender")
+	@RequestMapping("/atender_senha")
 	public String atenderSenha(@RequestParam(name="id") int id,Model model) {
 		try {
 			Senha senha = senhaService.loadSenha(id);
@@ -102,7 +103,7 @@ public class GeneratorController {
 			return "gerar";
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "Erro";
+			return "erro";
 		}
 	}
 	
@@ -111,13 +112,47 @@ public class GeneratorController {
 		try {
 			Senha senha = senhaService.loadSenha(id);
 			senhaService.proximaSenha(senha);
-						
 			return "gerar";
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "Erro";
+			return "erro";
 		}
 	}
 	
+	@RequestMapping("/senha_listar")
+	public String listarSenhas(Model model) {
+		try {
+			List<Senha> senhas = senhaService.listarSenha();
+			model.addAttribute("senhas", senhas);
+			return "listar";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "erro";
+		}
+	}
+	
+	@RequestMapping("/senha_atender")
+	public String senhaAtender(Model model) {			
+		try {
+			List<Servico> servicos = servicoService.listarServicos();
+			model.addAttribute("servicos", servicos);
+			return "atender";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "erro";
+		}
+	}
+	
+	@RequestMapping(value = "/listar_subservico", method = RequestMethod.GET)
+	@ResponseBody
+	public List<Subservico> listarSubServico(@RequestParam String id, HttpServletRequest request, HttpServletResponse response, Model model) {			
+		try {
+			List<Subservico> subServicos = subservicoService.loadSubservico(id);
+			return subServicos;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 	
 }

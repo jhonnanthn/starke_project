@@ -34,29 +34,29 @@ public class SenhaDAO {
 		List<Atendimento> atendimentos = query2.getResultList();
 		int sumFila = 0, sumAtendimento = 0;
 		int contA = 0, contB = 0;
-		for (Atendimento a : atendimentos) {
-
-			sumFila += a.getEspera();
-			contA++;
-
-			if (a.getDataSaida() != null) {
-				sumAtendimento += a.getDuracao();
-				contB++;
+		if(atendimentos.size() > 0) {
+			for (Atendimento a : atendimentos) {
+				sumFila += a.getEspera();
+				contA++;
+				if (a.getDataSaida() != null) {
+					sumAtendimento += a.getDuracao();
+					contB++;
+				}
 			}
+			int mediaFila = sumFila / contA;
+			int mediaAtendimento = sumAtendimento / contB;
+			
+			// Cria Calendar para poder adcionar Minutos facilmente, e depois transforma em Date
+			// Data estimada de Fila = Data Atual + media da fila
+			// Data estimada de Atendimento = Data Atual + media de fila + media de atendimento
+			Calendar cFila = Calendar.getInstance(), cAtendimento = Calendar.getInstance();
+			cFila.add(Calendar.MINUTE, mediaFila);
+			cAtendimento.add(Calendar.MINUTE, mediaFila + mediaAtendimento);
+			senha.setEstimativaFila(cFila.getTime());
+			senha.setEstimativaAtendimento(cAtendimento.getTime());
 		}
 
-		int mediaFila = sumFila / contA;
-		int mediaAtendimento = sumAtendimento / contB;
-		// Cria Calendar para poder adcionar Minutos facilmente, e depois transforma em Date
-		// Data estimada de Fila = Data Atual + media da fila
-		// Data estimada de Atendimento = Data Atual + media de fila + media de atendimento
-		Calendar cFila = Calendar.getInstance(), cAtendimento = Calendar.getInstance();
-		cFila.add(Calendar.MINUTE, mediaFila);
-		cAtendimento.add(Calendar.MINUTE, mediaFila + mediaAtendimento);
 		String idServico = senha.getServico().getId();
-
-		senha.setEstimativaFila(cFila.getTime());
-		senha.setEstimativaAtendimento(cAtendimento.getTime());
 		String novoNome;
 		// Caso lista tenha Senhas com o mesmo cod de servico, pega o nome do ultimo,
 		// subtrai as letras, verifica se é o ultimo (999) e então define o próximo nome (numeNovo)
@@ -88,10 +88,17 @@ public class SenhaDAO {
 	public Senha loadSenha(int id) {
 		return manager.find(Senha.class, id);
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Senha> listarSenha() {
+		return manager.createQuery("select s from Senha s order by tipo desc, data_entrada").getResultList();
+	}
 
 	public void updateSenha(Senha senha) {
 		manager.merge(senha);
 	}
+	
+	@SuppressWarnings("unchecked")
 	// Define o que sera feito ao acabar o atendimento; finalizar senha ou enviar para proxima fila.
 	public Senha proximaSenha(Senha senha) {
 		int next = senha.getSubservico().getOrdem() + 1;
