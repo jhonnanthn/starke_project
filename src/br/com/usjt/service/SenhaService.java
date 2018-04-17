@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.usjt.controller.ProximaChamada;
 import br.com.usjt.dao.SenhaDAO;
 import br.com.usjt.entity.Senha;
 
@@ -38,5 +39,10 @@ public class SenhaService {
 
 	public List<Senha> listarSenha() {
 		return senhaDAO.listarSenha();
+	}
+
+
+	public Senha buscaProximaSenha(ProximaChamada proximaChamada, String servico, String subservico) {
+		return senhaDAO.buscaProximaSenha(proximaChamada, servico, subservico);
 	}
 }

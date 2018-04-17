@@ -17,6 +17,7 @@
 		<c:import url="nav.jsp" />
 		<div class="container">
 			<section class="s-container">
+				<input class="hidden" name="proximaChamada" id="proximaChamada" value="${proximaChamada }">
 				<div class="s-container-result">
 					<section class="table">
 						<div class="thead">
@@ -50,7 +51,7 @@
 		                    </select>
 						</div>
 						<div class="form-group">
-							<button class="form-control btn btn-primary" type="submit" value="submit">Procurar</button>
+							<button class="form-control btn btn-primary senha_chamar">Procurar</button>
 						</div>
 					</form>
 				</div>
@@ -60,7 +61,6 @@
 		<script src="assets/js/popper.min.js"></script>	
 		<script>
 			$('#senha_servico').change(function(e){
-				console.log($('#senha_servico').val());
       			$.ajax({
       			    type : "GET",
       				url: "${pageContext.request.contextPath}/listar_subservico", 
@@ -68,7 +68,6 @@
       					id : $('#senha_servico').val()
       				},
       				success: function(result){
-             			console.log(result);
              			$("#subServico").html('<option value="full" selected>Todos</option>');
              			for(var i = 0; i < result.length; i++){
                  			$("#subServico").append('<option value="' + result[i].id + 
@@ -76,7 +75,40 @@
              			}
           			}
       			});
-        	});
+      	  	});
+			
+			$('.senha_chamar').click(function(e){
+			    e.preventDefault();
+				var passa = 0;
+				if($('#senha_servico option:selected').val() == ''){
+					passa = 1;
+				}
+				if($('#subServico option:selected').val() == ''){
+					passa = 1;
+				}
+				if(passa == 0){
+					qntProxChamada = $('#proximaChamada').val();
+
+	      			$.ajax({
+	      			    type : "GET",
+	      			    data : {
+	      			    		proxChamada: qntProxChamada,
+	      			    		servico : $("#senha_servico option:selected").val(),
+	      			    		subservico : $("#subServico option:selected").val()
+	      			    },
+	      				url: "${pageContext.request.contextPath}/senha_atender_proximo", 
+	      				success: function(result){
+	      					console.log(result);
+                 			$(".tbody").append('<div class="table-line">' +
+    								'<p> </p>' +
+    								'<p>' + result.nome +'</p>' +
+    								'<p>' + result.tipo +'</p>' +
+    								'<p>' + result.dataEntrada +'</p>' +
+	    							'</div>');
+	          			}
+	      			});
+				}
+      	  	});
 		</script>
 	</body>
 </html>

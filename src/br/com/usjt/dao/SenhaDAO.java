@@ -1,5 +1,6 @@
 package br.com.usjt.dao;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -10,6 +11,7 @@ import javax.persistence.Query;
 
 import org.springframework.stereotype.Repository;
 
+import br.com.usjt.controller.ProximaChamada;
 import br.com.usjt.entity.Atendimento;
 import br.com.usjt.entity.Senha;
 import br.com.usjt.entity.Subservico;
@@ -167,5 +169,37 @@ public class SenhaDAO {
 		manager.merge(atendimento);
 
 		return senha;
+	}
+
+	public Senha buscaProximaSenha(ProximaChamada proxChamada, String servico, String subservico) {
+		Query query = manager.createQuery("select s from Senha s where s.tipo = :tipo and s.servico.id = :servico and s.subservico.id = :subservico and s.status = 'aguardando' order by tipo desc, data_entrada");
+		String tipo = proxChamada.getTipo();
+		query.setParameter("tipo", tipo);
+		query.setParameter("servico", servico);
+		query.setParameter("subservico", (Integer.parseInt(subservico)));
+		query.setMaxResults(1);
+
+		
+		List senha = query.getResultList();
+		
+		if(senha.size() == 0) {
+			query = manager.createQuery("select s from Senha s where s.tipo = :tipo order by tipo desc, data_entrada");
+			tipo = "emergencial";
+			query.setParameter("tipo", tipo);
+			query.setMaxResults(1);
+			senha = query.getResultList();
+		}
+		
+		if(senha.size() == 0) {
+			query = manager.createQuery("select s from Senha s where s.tipo = :tipo order by tipo desc, data_entrada");
+			tipo = "comum";
+			query.setParameter("tipo", tipo);
+			query.setMaxResults(1);
+			senha = query.getResultList();
+		}
+		
+		return (Senha) senha.get(0);
+		
+		
 	}
 }

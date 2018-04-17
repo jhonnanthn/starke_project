@@ -12,7 +12,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name="senha")
@@ -39,6 +43,8 @@ public class Senha {
 	@Column(name="status")
 	private String status;
 	@Column(name="data_entrada")
+	@DateTimeFormat(pattern="dd/MM/yyyy hh24:mi:ss")
+	@Temporal(TemporalType.DATE)
 	private Date dataEntrada;
 	@Column(name="data_saida")
 	private Date dataSaida;
