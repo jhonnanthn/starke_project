@@ -43,8 +43,6 @@ public class Senha {
 	@Column(name="status")
 	private String status;
 	@Column(name="data_entrada")
-	@DateTimeFormat(pattern="dd/MM/yyyy hh24:mi:ss")
-	@Temporal(TemporalType.DATE)
 	private Date dataEntrada;
 	@Column(name="data_saida")
 	private Date dataSaida;
@@ -119,10 +117,9 @@ public class Senha {
 	
 	@Override
 	public String toString() {
-		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 		return "Senha [id=" + id + ", servico=" + servico + ", subservico=" + subservico + ", tipo=" + tipo + ", nome="
 				+ nome + ", status=" + status + ", dataEntrada=" + dataEntrada + ", dataSaida=" + dataSaida
-				+ ", estimativaFila=" + estimativaFila + ", dataEntradaString=" + df.format(dataEntrada)
+				+ ", estimativaFila=" + estimativaFila
 				+ ", estimativaAtendimento=" + estimativaAtendimento + "]";
 	}
 	

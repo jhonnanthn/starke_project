@@ -89,23 +89,44 @@ public class GeneratorController {
 		}
 	}
 	
-	@RequestMapping("/atender_senha")
-	public String atenderSenha(@RequestParam(name="id") int id,Model model) {
+	@RequestMapping(value = "/atender_proxima_senha", method = RequestMethod.GET)
+	@ResponseBody
+	public Atendimento atenderSenha(HttpSession session, HttpServletResponse response, Model model, @RequestParam(name="servico")String servico, 
+			@RequestParam(name="subservico")String subservico) {
 		try {
-			Senha senha = senhaService.loadSenha(id);
+//			List<Senha> senhas = senhaService.listarSenhasAtendimento(servico, Integer.parseInt(subservico));
+			ProximaChamada proxChamada = (ProximaChamada) session.getAttribute("proximaChamada");
+			if(proxChamada == null)	proxChamada = new ProximaChamada();
+			int qntChamadas = proxChamada.getRG() + proxChamada.getCNPJ() + proxChamada.getCNH();
+			if(qntChamadas > 3 )			
+				proxChamada.setTipo("comum");
+			if(qntChamadas == 3)			
+				proxChamada.setTipo("emergencial");
+			if(qntChamadas < 3)			
+				proxChamada.setTipo("preferencial");
+			
+			if(servico.equals("RG"))		
+				proxChamada.setRG(proxChamada.getRG()+1);
+			else if(servico.equals("CJ"))		
+				proxChamada.setCNH(proxChamada.getCNPJ()+1);
+			else if(servico.equals("CN"))		
+				proxChamada.setCNPJ(proxChamada.getCNH()+1);
+			
+			session.setAttribute("proximaChamada", proxChamada);
+			Senha senha = senhaService.buscaProximaSenha(proxChamada, servico, subservico);
 			senha.setStatus("atendimento");
 			senhaService.updateSenha(senha);
-			
+
 			Atendimento atendimento = atendimentoService.loadAtendimento(senha);
 			atendimento.setDataEntrada(new Date());
 			long x = (atendimento.getDataEntrada().getTime()-atendimento.getDataGerado().getTime())/1000;
 			atendimento.setEspera((int) x/60);
 			atendimentoService.updateAtendimento(atendimento);
-			
-			return "gerar";
+			System.out.println(atendimento);
+			return atendimento;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "erro";
+			return null;
 		}
 	}
 	
@@ -121,30 +142,17 @@ public class GeneratorController {
 		}
 	}
 	
-	@RequestMapping(value = "/senha_atender_proximo", method = RequestMethod.GET)
-	public @ResponseBody Senha atenderProximaSenha(HttpSession session, HttpServletResponse response, Model model, String servico, String subservico) {			
+	@RequestMapping(value = "/listar_senhas_atendimento", method = RequestMethod.GET)
+	public @ResponseBody List<Senha> listarSenhasAtendimento(HttpSession session, HttpServletResponse response, Model model, String servico, String subservico) {			
 		try {
-			ProximaChamada proxChamada = (ProximaChamada) session.getAttribute("proximaChamada");
-			if(proxChamada == null)	proxChamada = new ProximaChamada();
-			int qntChamadas = proxChamada.getRG() + proxChamada.getCNPJ() + proxChamada.getCNH();
-			if(qntChamadas > 3 )			proxChamada.setTipo("comum");
-			if(qntChamadas == 3)			proxChamada.setTipo("emergencial");
-			if(qntChamadas < 3)			proxChamada.setTipo("prefencial");
-			if(servico.equals("RG"))		proxChamada.setRG(proxChamada.getRG()+1);
-			if(servico.equals("CJ"))		proxChamada.setCNH(proxChamada.getCNPJ()+1);
-			if(servico.equals("CN"))		proxChamada.setCNPJ(proxChamada.getCNH()+1);
-			session.setAttribute("proximaChamada", proxChamada);
-			
-			Senha senha = senhaService.buscaProximaSenha(proxChamada, servico, subservico);
-			//senha.setStatus("atendimento");
-			senhaService.updateSenha(senha);
-			return senha;
+			List<Senha> senhas = senhaService.listarSenhasAtendimento(servico, Integer.parseInt(subservico));
+			return senhas;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
-	
+		
 	@RequestMapping("/senha_listar")
 	public String listarSenhas(Model model) {
 		try {
@@ -163,10 +171,10 @@ public class GeneratorController {
 			List<Servico> servicos = servicoService.listarServicos();
 			ProximaChamada proxChamada;
 			proxChamada = (ProximaChamada) session.getAttribute("proximaChamada");
-			if(proxChamada == null)		proxChamada = new ProximaChamada();
+			if(proxChamada == null)
+				session.setAttribute("proximaChamada", new ProximaChamada());
 			model.addAttribute("servicos", servicos);
-			session.setAttribute("proximaChamada", proxChamada);
-
+			
 			return "atender";
 		} catch (Exception e) {
 			e.printStackTrace();

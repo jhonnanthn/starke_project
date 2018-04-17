@@ -17,14 +17,14 @@
 		<c:import url="nav.jsp" />
 		<div class="container">
 			<section class="s-container">
-				<input class="hidden" name="proximaChamada" id="proximaChamada" value="${proximaChamada }">
+				<!--  <input type="hidden" name="proximaChamada" id="proximaChamada" value="${proximaChamada }"> -->
 				<div class="s-container-result">
 					<section class="table">
 						<div class="thead">
 							<div class="table-line">
-								<p> </p>
 								<p>Senha</p>
 								<p>Tipo</p>
+								<p>Status</p>
 								<p>Horário de Início</p>
 							</div>
 						</div>
@@ -56,10 +56,32 @@
 					</form>
 				</div>
 			</section>
+			<div class="form-group input-table">
+				<button class="form-control btn btn-primary atender">Atender</button>
+				<button class="form-control btn btn-primary encerrar">Encerrar Atendimento</button>
+			</div>
 		</div> 
 		<script src="assets/js/jquery-3.3.1.min.js"></script>
 		<script src="assets/js/popper.min.js"></script>	
+		<script src="assets/js/script.js"></script>	
 		<script>
+			$(".input-table .atender").click(function(e){
+				$.ajax({
+      			    type : "GET",
+      				url: "${pageContext.request.contextPath}/atender_proxima_senha", 
+      				data : {
+  			    		servico : $("#senha_servico option:selected").val(),
+  			    		subservico : $("#subServico option:selected").val()
+  			    	},
+      				success: function(result){
+      					console.log(result);               			
+          			},
+          			error: function(result){
+      					console.log(result);               			
+          			}
+      			});
+			});
+				
 			$('#senha_servico').change(function(e){
       			$.ajax({
       			    type : "GET",
@@ -68,7 +90,7 @@
       					id : $('#senha_servico').val()
       				},
       				success: function(result){
-             			$("#subServico").html('<option value="full" selected>Todos</option>');
+             			$("#subServico").html('');
              			for(var i = 0; i < result.length; i++){
                  			$("#subServico").append('<option value="' + result[i].id + 
                  					'">' + result[i].nome + '</option>');
@@ -79,35 +101,34 @@
 			
 			$('.senha_chamar').click(function(e){
 			    e.preventDefault();
-				var passa = 0;
-				if($('#senha_servico option:selected').val() == ''){
-					passa = 1;
-				}
-				if($('#subServico option:selected').val() == ''){
-					passa = 1;
-				}
-				if(passa == 0){
-					qntProxChamada = $('#proximaChamada').val();
-
-	      			$.ajax({
-	      			    type : "GET",
-	      			    data : {
-	      			    		proxChamada: qntProxChamada,
-	      			    		servico : $("#senha_servico option:selected").val(),
-	      			    		subservico : $("#subServico option:selected").val()
-	      			    },
-	      				url: "${pageContext.request.contextPath}/senha_atender_proximo", 
-	      				success: function(result){
-	      					console.log(result);
-                 			$(".tbody").append('<div class="table-line">' +
-    								'<p> </p>' +
-    								'<p>' + result.nome +'</p>' +
-    								'<p>' + result.tipo +'</p>' +
-    								'<p>' + result.dataEntrada +'</p>' +
-	    							'</div>');
-	          			}
-	      			});
-				}
+			    $.ajax({
+      			    type : "GET",
+      			    data : {
+      			    		servico : $("#senha_servico option:selected").val(),
+      			    		subservico : $("#subServico option:selected").val()
+      			    },
+      				url: "${pageContext.request.contextPath}/listar_senhas_atendimento", 
+      				success: function(result){
+      					console.log(result);
+      					$(".tbody").html("");
+      					if(result.length == 0)
+      						$(".input-table").hide();
+      					else
+      						$(".input-table").show();
+               			for (var i = 0; i < result.length; i++) {
+               				var date = new Date(result[i].dataEntrada);
+               				$(".tbody").append('<div class="table-line">' +
+     							'<p>' + result[i].nome +'</p>' +
+   								'<p>' + result[i].tipo +'</p>' +
+   								'<p>' + result[i].status +'</p>' +
+   								'<p>' + truncate(date.getDate(), 2) + "/" + 
+   								truncate(date.getMonth() + 1, 2) + "/" + date.getFullYear() +
+   								" " + truncate(date.getHours(),2) + ":" + truncate(date.getMinutes(),2) + ":" + 
+   								truncate(date.getSeconds(),2) +'</p>' +
+    							'</div>');
+						}
+          			}
+      			});
       	  	});
 		</script>
 	</body>

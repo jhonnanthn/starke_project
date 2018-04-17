@@ -36,12 +36,14 @@ public class SenhaService {
 		return senhaDAO.proximaSenha(senha);
 	}
 
-
 	public List<Senha> listarSenha() {
 		return senhaDAO.listarSenha();
 	}
 
-
+	public List<Senha> listarSenhasAtendimento(String servico, int subservico) {
+		return senhaDAO.listarSenha(servico, subservico);
+	}
+	
 	public Senha buscaProximaSenha(ProximaChamada proximaChamada, String servico, String subservico) {
 		return senhaDAO.buscaProximaSenha(proximaChamada, servico, subservico);
 	}

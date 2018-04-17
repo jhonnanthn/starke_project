@@ -1,6 +1,4 @@
 package br.com.usjt.dao;
-
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -94,6 +92,11 @@ public class SenhaDAO {
 	@SuppressWarnings("unchecked")
 	public List<Senha> listarSenha() {
 		return manager.createQuery("select s from Senha s order by tipo desc, data_entrada").getResultList();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Senha> listarSenha(String servico, int subservico) {
+		return manager.createQuery("select s from Senha s  where id_servico = '" + servico + "' and id_subservico = " + subservico + " order by tipo desc, data_entrada").getResultList();
 	}
 
 	public void updateSenha(Senha senha) {
