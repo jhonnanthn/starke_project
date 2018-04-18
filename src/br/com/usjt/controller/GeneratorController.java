@@ -124,6 +124,7 @@ public class GeneratorController {
 			atendimentoService.updateAtendimento(atendimento);
 			System.out.println(atendimento);
 			return atendimento;
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -191,6 +192,26 @@ public class GeneratorController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
+		}
+	}
+	
+	@RequestMapping("/senha_atender_old")
+	public String atenderSenha(@RequestParam(name="id") int id,Model model) {
+		try {
+			Senha senha = senhaService.loadSenha(id);
+			senha.setStatus("atendimento");
+			senhaService.updateSenha(senha);
+			
+			Atendimento atendimento = atendimentoService.loadAtendimento(senha);
+			atendimento.setDataEntrada(new Date());
+			long x = (atendimento.getDataEntrada().getTime()-atendimento.getDataGerado().getTime())/1000;
+			atendimento.setEspera((int) x/60);
+			atendimentoService.updateAtendimento(atendimento);
+			
+			return "gerar";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "Erro";
 		}
 	}
 	

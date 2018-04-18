@@ -44,7 +44,11 @@ public class SenhaDAO {
 				}
 			}
 			int mediaFila = sumFila / contA;
-			int mediaAtendimento = sumAtendimento / contB;
+			int mediaAtendimento = 0;
+			if (contB != 0)
+				mediaAtendimento = sumAtendimento / contB;
+		
+	
 			
 			// Cria Calendar para poder adcionar Minutos facilmente, e depois transforma em Date
 			// Data estimada de Fila = Data Atual + media da fila
@@ -91,12 +95,15 @@ public class SenhaDAO {
 	
 	@SuppressWarnings("unchecked")
 	public List<Senha> listarSenha() {
-		return manager.createQuery("select s from Senha s order by tipo desc, data_entrada").getResultList();
+		Query q = manager.createQuery("select s from Senha s WHERE NOT s.status = 'finalizado' order by tipo desc, estimativa_fila");
+		q.setMaxResults(20);
+		return q.getResultList();
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<Senha> listarSenha(String servico, int subservico) {
-		return manager.createQuery("select s from Senha s  where id_servico = '" + servico + "' and id_subservico = " + subservico + " order by tipo desc, data_entrada").getResultList();
+
+		return manager.createQuery("select s from Senha s  where id_servico = '" + servico + "' and id_subservico = " + subservico + " AND  NOT s.status = 'finalizado'  order by tipo desc, data_entrada").getResultList();
 	}
 
 	public void updateSenha(Senha senha) {
@@ -136,7 +143,10 @@ public class SenhaDAO {
 				}
 			}
 			int mediaFila = sumFila / contA;
-			int mediaAtendimento = sumAtendimento / contB;
+			int mediaAtendimento = 0;
+			if (contB != 0 ) {
+				mediaAtendimento = sumAtendimento / contB;
+			}
 
 			Calendar cFila = Calendar.getInstance(), cAtendimento = Calendar.getInstance();
 			cFila.add(Calendar.MINUTE, mediaFila);
@@ -186,17 +196,21 @@ public class SenhaDAO {
 		List senha = query.getResultList();
 		
 		if(senha.size() == 0) {
-			query = manager.createQuery("select s from Senha s where s.tipo = :tipo order by tipo desc, data_entrada");
+			query = manager.createQuery("select s from Senha s where s.tipo = :tipo and s.servico.id = :servico and s.subservico.id = :subservico and s.status = 'aguardando' order by tipo desc, data_entrada");
 			tipo = "emergencial";
 			query.setParameter("tipo", tipo);
+			query.setParameter("servico", servico);
+			query.setParameter("subservico", (Integer.parseInt(subservico)));
 			query.setMaxResults(1);
 			senha = query.getResultList();
 		}
 		
 		if(senha.size() == 0) {
-			query = manager.createQuery("select s from Senha s where s.tipo = :tipo order by tipo desc, data_entrada");
+			query = manager.createQuery("select s from Senha s where s.tipo = :tipo and s.servico.id = :servico and s.subservico.id = :subservico and s.status = 'aguardando' order by tipo desc, data_entrada");
 			tipo = "comum";
 			query.setParameter("tipo", tipo);
+			query.setParameter("servico", servico);
+			query.setParameter("subservico", (Integer.parseInt(subservico)));
 			query.setMaxResults(1);
 			senha = query.getResultList();
 		}

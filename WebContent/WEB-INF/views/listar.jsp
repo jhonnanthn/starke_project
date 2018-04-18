@@ -24,9 +24,10 @@
 							<p>Senha</p>
 							<p>Tipo</p>
 							<p>Status</p>
-							<p>Tempo Médio</p>
 							<p>Horário Chegada</p>
-							<p>Aguardando a</p>
+							<p>Estimativa</p>
+
+							<p>Fim do Atendimento</p>
 						</div>
 					</div>
 					<div class="tbody">
@@ -35,9 +36,9 @@
 								<p>${senha.nome}</p>
 								<p>${senha.tipo}</p>
 								<p>${senha.status}</p>
-								<p>Tempo Médio</p>
-								<p><fmt:formatDate pattern = "HH:mm:ss" value = "${senha.dataEntrada}" /></p>
-								<p>Aguardando a</p>
+								<p><fmt:formatDate pattern = "HH:mm" value = "${senha.dataEntrada}" /></p>
+								<p><fmt:formatDate pattern = "HH:mm" value = "${senha.estimativaFila}" /></p>
+								<p><fmt:formatDate pattern = "HH:mm" value = "${senha.estimativaAtendimento}" /></p>
 							</div>
                         </c:forEach>
 					</div>
@@ -46,5 +47,11 @@
 		</div> 
 		<script src="assets/js/jquery-3.3.1.min.js"></script>
 		<script src="assets/js/popper.min.js"></script>	
+		<script>
+		$(document).ready(function(){
+			setTimeout(function(){
+				document.location.href = "senha_listar";
+			},30000);
+		});</script>
 	</body>
 </html>
