@@ -28,7 +28,6 @@ public class AtendimentoDAO {
 		query.setParameter("id", senha.getSubservico().getId());
 		query.setParameter("id2", senha.getId());
 		Atendimento atendimento = (Atendimento) query.getSingleResult();
-		
 		return atendimento;
 	}
 	

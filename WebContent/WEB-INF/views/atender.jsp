@@ -81,6 +81,22 @@
           			}
       			});
 			});
+			
+			$(".input-table .encerrar").click(function(e){
+				$.ajax({
+      			    type : "GET",
+      				url: "${pageContext.request.contextPath}/senha_proxima", 
+      				data : {
+  			    		senha : $(".senha0").text()
+  			    	},
+      				success: function(result){
+      					console.log(result);               			
+          			},
+          			error: function(result){
+      					console.log(result);               			
+          			}
+      			});
+			});
 				
 			$('#senha_servico').change(function(e){
       			$.ajax({
@@ -118,7 +134,7 @@
                			for (var i = 0; i < result.length; i++) {
                				var date = new Date(result[i].dataEntrada);
                				$(".tbody").append('<div class="table-line">' +
-     							'<p>' + result[i].nome +'</p>' +
+     							'<p class="senha' + i + '">' + result[i].nome +'</p>' +
    								'<p>' + result[i].tipo +'</p>' +
    								'<p>' + result[i].status +'</p>' +
    								'<p>' + truncate(date.getDate(), 2) + "/" + 

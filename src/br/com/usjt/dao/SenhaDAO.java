@@ -1,4 +1,6 @@
 package br.com.usjt.dao;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -112,53 +114,74 @@ public class SenhaDAO {
 	@SuppressWarnings("unchecked")
 	// Define o que sera feito ao acabar o atendimento; finalizar senha ou enviar para proxima fila.
 	public Senha proximaSenha(Senha senha) {
-		int next = senha.getSubservico().getOrdem() + 1;
-		String idServico = senha.getServico().getId();
-		
-		//utilizada mais tarde para alterar Atendimento
+		int next = senha.getSubservico().getOrdem();
 		int oldSub = senha.getSubservico().getId();
-		// Select o próximo subservico de um Servico, se existir, baseado no campo ordem
-		Query query = manager.createQuery(
-				"select s from Subservico s where s.servico.id = :idServico AND s.ordem = :next");
-		query.setParameter("idServico", idServico);
-		query.setParameter("next", next);
-		Subservico subservico = (Subservico) query.getSingleResult();
-		// Se existe, então senha será inserida nesse proximo subservico.
-		//	São alterados Status, idSubservico e inseridas novas estimativas.
-		if (subservico != null) {
-			senha.setStatus("aguardando");
-			senha.setSubservico(subservico);
-			// Denovo essa joça, deveria ser feita num func mas estava com pressa n me julguem
-			Query query2 = manager.createQuery("select a from Atendimento a where a.dataEntrada IS NOT NULL");
-			List<Atendimento> atendimentos = query2.getResultList();
-			int sumFila = 0, sumAtendimento = 0;
-			int contA = 0, contB = 0;
-			for (Atendimento a : atendimentos) {
-				sumFila += a.getEspera();
-				contA++;
-				if (a.getDataSaida() != null) {
-					sumAtendimento += a.getDuracao();
+		if(next < 3) {
+			next += 1;
+			String idServico = senha.getServico().getId();
+			
+			//utilizada mais tarde para alterar Atendimento
+			// Select o próximo subservico de um Servico, se existir, baseado no campo ordem
+			Query query = manager.createQuery(
+					"select s from Subservico s where s.servico.id = :idServico AND s.ordem = :next");
+			query.setParameter("idServico", idServico);
+			query.setParameter("next", next);
+			Subservico subservico = (Subservico) query.getSingleResult();
+			// Se existe, então senha será inserida nesse proximo subservico.
+			//	São alterados Status, idSubservico e inseridas novas estimativas.
+			if (subservico != null) {
+				senha.setStatus("aguardando");
+				senha.setSubservico(subservico);
+				// Denovo essa joça, deveria ser feita num func mas estava com pressa n me julguem
+				Query query2 = manager.createQuery("select a from Atendimento a where a.dataEntrada IS NOT NULL");
+				List<Atendimento> atendimentos = query2.getResultList();
+				int sumFila = 0, sumAtendimento = 0;
+				int contA = 0, contB = 0;
+				for (Atendimento a : atendimentos) {
+					sumFila += a.getEspera();
+					contA++;
+				}
+				int mediaFila = 0;
+				if (contA != 0 ) {
+					mediaFila = sumFila / contA;
+				}
+				Query query3 = manager.createQuery("select a from Senha a where a.dataSaida IS NOT NULL");
+				List<Senha> calculaTempoServicos = query3.getResultList();
+				
+				for (Senha a : calculaTempoServicos) {
+					try {
+				        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+						Date dateEntrada = new SimpleDateFormat("HH:mm:ss").parse(sdf.format(a.getDataEntrada()));
+						int entrada = Integer.parseInt(new SimpleDateFormat("hhmmss").format(dateEntrada));
+						Date dateSaida = new SimpleDateFormat("HH:mm:ss").parse(sdf.format(a.getDataSaida()));  
+						int saida = Integer.parseInt(new SimpleDateFormat("hhmmss").format(dateSaida));
+	
+						sumAtendimento += (saida - entrada);
+						
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}  
 					contB++;
 				}
+				int mediaAtendimento = 0;
+				if (contB != 0 ) {
+					mediaAtendimento = sumAtendimento / contB;
+				}
+				Calendar cFila = Calendar.getInstance();
+				Calendar cAtendimento = Calendar.getInstance();
+				cFila.add(Calendar.SECOND, mediaFila);
+				cAtendimento.add(Calendar.SECOND, mediaFila + mediaAtendimento);
+				senha.setEstimativaFila(cFila.getTime());
+				senha.setEstimativaAtendimento(cAtendimento.getTime());
+				
+				// Após passar senha para proximo servico, é gerado o Atendimento do novo estado da Senha
+				Atendimento at = new Atendimento();
+				at.setSenha(senha);
+				at.setSubservico(subservico);
+				at.setDataEntrada(new Date());
+				at.setDataGerado(new Date());
+				manager.persist(at);
 			}
-			int mediaFila = sumFila / contA;
-			int mediaAtendimento = 0;
-			if (contB != 0 ) {
-				mediaAtendimento = sumAtendimento / contB;
-			}
-
-			Calendar cFila = Calendar.getInstance(), cAtendimento = Calendar.getInstance();
-			cFila.add(Calendar.MINUTE, mediaFila);
-			cAtendimento.add(Calendar.MINUTE, mediaFila + mediaAtendimento);
-			senha.setEstimativaFila(cFila.getTime());
-			senha.setEstimativaAtendimento(cAtendimento.getTime());
-			
-			// Após passar senha para proximo servico, é gerado o Atendimento do novo estado da Senha
-			Atendimento at = new Atendimento();
-			at.setSenha(senha);
-			at.setSubservico(subservico);
-			at.setDataGerado(new Date());
-			manager.persist(at);
 			
 		// Se não existe proximo, só finaliza a senha atual
 		}else {
@@ -175,9 +198,12 @@ public class SenhaDAO {
 		x.setParameter("id2", senha.getId());
 		Atendimento atendimento = (Atendimento) x.getSingleResult();
 		atendimento.setDataSaida(new Date());
-		long l = (atendimento.getDataSaida().getTime()-atendimento.getDataGerado().getTime())/1000;
+		long l = 0;
+		if(atendimento.getDataEntrada() != null);
+			l = (atendimento.getDataSaida().getTime()-atendimento.getDataEntrada().getTime())/1000;
 		atendimento.setDuracao((int) l/60);
-		
+		long espera = (atendimento.getDataSaida().getTime() - atendimento.getDataGerado().getTime())/1000;
+		atendimento.setEspera((int) espera/60);		
 		manager.merge(atendimento);
 
 		return senha;
@@ -217,5 +243,12 @@ public class SenhaDAO {
 		return (Senha) senha.get(0);
 		
 		
+	}
+
+	public Senha buscaInforBySenha(String senha) {
+		Query query = manager.createQuery("select a from Senha a where a.nome = :nome");
+		query.setParameter("nome", senha);
+		Senha result = (Senha) query.getSingleResult();
+		return result;
 	}
 }

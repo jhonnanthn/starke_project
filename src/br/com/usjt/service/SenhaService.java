@@ -46,4 +46,9 @@ public class SenhaService {
 	public Senha buscaProximaSenha(String proximaChamada, String servico, String subservico) {
 		return senhaDAO.buscaProximaSenha(proximaChamada, servico, subservico);
 	}
+
+
+	public Senha buscaInforBySenha(String senha) {
+		return senhaDAO.buscaInforBySenha(senha);
+	}
 }
