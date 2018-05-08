@@ -59,6 +59,48 @@ public class SenhaDAO {
 		manager.persist(senha);
 
 	}
+	
+	@SuppressWarnings({ "unchecked" })
+	public Senha gerarGetSenha(Senha senha) {
+
+		// Query para buscar o ultimo nome
+		Query query = manager.createQuery("select s from Senha s where id_servico = :id_servico");
+		query.setParameter("id_servico", senha.getServico().getId());
+		List<Senha> list = query.getResultList();
+
+		// int horaAtual = new Date().getHours();
+
+		// Query para gerar médias de espera na fila e duração do antedimento
+		senha = getEstimativas(senha);
+
+		String idServico = senha.getServico().getId();
+		String novoNome;
+		// Caso lista tenha Senhas com o mesmo cod de servico, pega o nome do ultimo,
+		// subtrai as letras, verifica se é o ultimo (999) e então define o próximo nome
+		// (numeNovo)
+		if (!list.isEmpty()) {
+			String lastNome = list.get(list.size() - 1).getNome();
+			int n = Integer.parseInt(lastNome.substring(2)) + 1;
+			if (n > 999) {
+				novoNome = idServico + "001";
+			} else {
+				String nFormatado = String.format("%03d", n);
+				novoNome = idServico + nFormatado;
+			}
+
+		} else {
+			novoNome = idServico + "001";
+		}
+
+		senha.setNome(novoNome);
+
+		// DataEntrada e Status são default
+		senha.setDataEntrada(new Date());
+		senha.setStatus("aguardando");
+		manager.persist(senha);
+		return senha;
+
+	}
 
 	public Senha loadSenha(int id) {
 		return manager.find(Senha.class, id);
@@ -158,13 +200,7 @@ public class SenhaDAO {
 		int sumFila = 0;
 		long sumAtendimento = 0;
 		int mediaAtendimento = 0, mediaFila = 0;
-		// TODO É aqui pra consertar a porra da estimativa, jhonas.
-		if (senhas.size() > 0) {
-			for (Senha s : senhas) {
-				sumAtendimento += (s.getDataSaida().getTime() - s.getDataEntrada().getTime()) / 1000 / 60;
-			}
-			mediaAtendimento = (int) (sumAtendimento / senhas.size());
-		}
+		
 		if (atendimentos.size() > 0) {
 			for (Atendimento a : atendimentos) {
 				sumFila += a.getEspera();
@@ -172,6 +208,12 @@ public class SenhaDAO {
 			mediaFila = sumFila / atendimentos.size();
 		}
 
+		if (senhas.size() > 0) {
+			for (Senha s : senhas) {
+				sumAtendimento += (s.getDataSaida().getTime() - s.getDataEntrada().getTime()) / 1000 / 60;
+			}
+			mediaAtendimento = (int) (sumAtendimento / senhas.size());
+		}
 		// Cria Calendar para poder adcionar Minutos facilmente, e depois transforma em
 		// Date
 		// Data estimada de Fila = Data Atual + media da fila

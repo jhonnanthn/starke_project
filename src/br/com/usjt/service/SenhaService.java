@@ -22,6 +22,10 @@ public class SenhaService {
 		senhaDAO.gerarSenha(senha);
 	}
 	
+	public Senha gerarGetSenha(Senha senha) {
+		return senhaDAO.gerarGetSenha(senha);
+	}
+	
 	public Senha loadSenha(int id) {
 		return senhaDAO.loadSenha(id);
 	}

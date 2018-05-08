@@ -65,7 +65,7 @@ public class RestController {
 		Atendimento atendimento = new Atendimento();
 		atendimento.setSenha(senha);
 		atendimento.setSubservico(subservico);
-		senhaS.gerarSenha(senha);
+		senha = senhaS.gerarGetSenha(senha);
 		atendimentoS.gerarAtendimento(atendimento);
 
 		return senha;
