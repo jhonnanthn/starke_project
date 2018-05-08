@@ -87,7 +87,7 @@
       			    type : "GET",
       				url: "${pageContext.request.contextPath}/senha_proxima", 
       				data : {
-  			    		senha : $(".senha0").text()
+  			    		senha : $("#senha0").data("id")
   			    	},
       				success: function(result){
       					console.log(result);               			
@@ -134,7 +134,7 @@
                			for (var i = 0; i < result.length; i++) {
                				var date = new Date(result[i].dataEntrada);
                				$(".tbody").append('<div class="table-line">' +
-     							'<p class="senha' + i + '">' + result[i].nome +'</p>' +
+     							'<p id="senha' + i + '" data-id="' + result[i].id +'">' + result[i].nome +'</p>' +
    								'<p>' + result[i].tipo +'</p>' +
    								'<p>' + result[i].status +'</p>' +
    								'<p>' + truncate(date.getDate(), 2) + "/" + 
