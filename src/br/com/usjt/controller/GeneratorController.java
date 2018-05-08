@@ -132,9 +132,9 @@ public class GeneratorController {
 	}
 	
 	@RequestMapping("/senha_proxima")
-	public String proximaSenha(String senha,Model model) {
+	public String proximaSenha(int senha,Model model) {
 		try {
-			Senha informacoes = senhaService.buscaInforBySenha(senha);
+			Senha informacoes = senhaService.loadSenha(senha);
 			senhaService.proximaSenha(informacoes);
 			return "atender";
 		} catch (Exception e) {

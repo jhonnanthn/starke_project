@@ -222,11 +222,4 @@ public class SenhaDAO {
 		return (Senha) senha.get(0);
 
 	}
-
-	public Senha buscaInforBySenha(String senha) {
-		Query query = manager.createQuery("select a from Senha a where a.nome = :nome");
-		query.setParameter("nome", senha);
-		Senha result = (Senha) query.getSingleResult();
-		return result;
-	}
 }
