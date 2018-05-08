@@ -19,7 +19,7 @@ import br.com.usjt.service.AtendimentoService;
 import br.com.usjt.service.SenhaService;
 import br.com.usjt.service.ServicoService;
 import br.com.usjt.service.SubservicoService;
-
+@Transactional
 @org.springframework.web.bind.annotation.RestController
 public class RestController {
 
@@ -29,22 +29,29 @@ public class RestController {
 	private AtendimentoService atendimentoS;
 
 	@Autowired
-	public RestController(ServicoService a, SubservicoService b, SenhaService c, AtendimentoService d) {
+	public RestController(ServicoService a, SubservicoService b, 
+			SenhaService c, AtendimentoService d) {
 		servicoS = a;
 		subservicoS = b;
 		senhaS = c;
 		atendimentoS = d;
 	}
 
-	@Transactional
+	
 	@RequestMapping(method = RequestMethod.GET, value = "rest/servicos")
 	public @ResponseBody List<Servico> listarServicos() throws IOException {
 		List<Servico> servicos = null;
 		servicos = servicoS.listarServicos();
 		return servicos;
 	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "rest/senhas")
+	public @ResponseBody List<Senha> listarSenhas() throws IOException {
+		List<Senha> senhas = null;
+		senhas = senhaS.listarSenha();
+		return senhas;
+	}
 
-	@Transactional
 	@RequestMapping(method = RequestMethod.GET, value = "rest/criar_senha/{tipo}/{id_servico}")
 	public @ResponseBody Senha listarChamados(@PathVariable("tipo") String tipo,
 			@PathVariable("id_servico") String idServico) {

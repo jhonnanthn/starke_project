@@ -96,7 +96,7 @@ public class GeneratorController {
 	
 	@RequestMapping(value = "/atender_proxima_senha", method = RequestMethod.GET)
 	@ResponseBody
-	public Atendimento atenderSenha(HttpSession session, HttpServletResponse response, Model model, @RequestParam(name="servico")String servico, 
+	public void atenderSenha(HttpSession session, HttpServletResponse response, Model model, @RequestParam(name="servico")String servico, 
 			@RequestParam(name="subservico")String subservico) {
 		try {
 //			List<Senha> senhas = senhaService.listarSenhasAtendimento(servico, Integer.parseInt(subservico));
@@ -120,11 +120,14 @@ public class GeneratorController {
 			senhaService.updateSenha(senha);
 
 			Atendimento atendimento = atendimentoService.loadAtendimento(senha);
-			return atendimento;
+			atendimento.setDataEntrada(new Date());
+			atendimento.setEspera((int) ((atendimento.getDataEntrada().getTime()-atendimento.getDataGerado().getTime())/1000/60));
+			atendimentoService.updateAtendimento(atendimento);
+//			return atendimento;
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			return null;
+//			return null;
 		}
 	}
 	
