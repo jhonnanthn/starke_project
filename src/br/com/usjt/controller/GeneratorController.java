@@ -1,13 +1,11 @@
 package br.com.usjt.controller;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,9 +23,7 @@ import br.com.usjt.service.AtendimentoService;
 import br.com.usjt.service.SenhaService;
 import br.com.usjt.service.ServicoService;
 import br.com.usjt.service.SubservicoService;
-//TODO FAZER A ESTIMATIVA BASEADA NO TIPO DA SENHA!!!!!!!!
 
-@Transactional
 @Controller
 public class GeneratorController {
 	SenhaService senhaService;
@@ -83,7 +79,10 @@ public class GeneratorController {
 			Atendimento atendimento = new Atendimento();
 			atendimento.setSenha(senha);
 			atendimento.setSubservico(subservico);
-			senhaService.gerarSenha(senha);
+			synchronized (this) {
+				senhaService.gerarSenha(senha);
+			}
+	
 			atendimentoService.gerarAtendimento(atendimento);
 			model.addAttribute("atendimento", atendimento);
 			criar_senha_gerador(model);

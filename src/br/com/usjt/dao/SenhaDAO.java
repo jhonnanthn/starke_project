@@ -9,16 +9,19 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.usjt.entity.Atendimento;
 import br.com.usjt.entity.Senha;
 import br.com.usjt.entity.Subservico;
 
+@Transactional
 @Repository
 public class SenhaDAO {
 	@PersistenceContext
 	EntityManager manager;
 
+	
 	@SuppressWarnings({ "unchecked" })
 	public void gerarSenha(Senha senha) {
 
@@ -26,8 +29,7 @@ public class SenhaDAO {
 		Query query = manager.createQuery("select s from Senha s where id_servico = :id_servico");
 		query.setParameter("id_servico", senha.getServico().getId());
 		List<Senha> list = query.getResultList();
-
-		// int horaAtual = new Date().getHours();
+//		Senha senha = (Senha) query.getFirstxResult();
 
 		// Query para gerar médias de espera na fila e duração do antedimento
 		senha = getEstimativas(senha);
@@ -60,48 +62,7 @@ public class SenhaDAO {
 
 	}
 	
-	@SuppressWarnings({ "unchecked" })
-	public Senha gerarGetSenha(Senha senha) {
-
-		// Query para buscar o ultimo nome
-		Query query = manager.createQuery("select s from Senha s where id_servico = :id_servico");
-		query.setParameter("id_servico", senha.getServico().getId());
-		List<Senha> list = query.getResultList();
-
-		// int horaAtual = new Date().getHours();
-
-		// Query para gerar médias de espera na fila e duração do antedimento
-		senha = getEstimativas(senha);
-
-		String idServico = senha.getServico().getId();
-		String novoNome;
-		// Caso lista tenha Senhas com o mesmo cod de servico, pega o nome do ultimo,
-		// subtrai as letras, verifica se é o ultimo (999) e então define o próximo nome
-		// (numeNovo)
-		if (!list.isEmpty()) {
-			String lastNome = list.get(list.size() - 1).getNome();
-			int n = Integer.parseInt(lastNome.substring(2)) + 1;
-			if (n > 999) {
-				novoNome = idServico + "001";
-			} else {
-				String nFormatado = String.format("%03d", n);
-				novoNome = idServico + nFormatado;
-			}
-
-		} else {
-			novoNome = idServico + "001";
-		}
-
-		senha.setNome(novoNome);
-
-		// DataEntrada e Status são default
-		senha.setDataEntrada(new Date());
-		senha.setStatus("aguardando");
-		manager.persist(senha);
-		return senha;
-
-	}
-
+	
 	public Senha loadSenha(int id) {
 		return manager.find(Senha.class, id);
 	}
@@ -127,7 +88,7 @@ public class SenhaDAO {
 		manager.merge(senha);
 	}
 
-	@SuppressWarnings("unchecked")
+	
 	// Define o que sera feito ao acabar o atendimento; finalizar senha ou enviar
 	// para proxima fila.
 	public Senha proximaSenha(Senha senha) {
@@ -228,6 +189,7 @@ public class SenhaDAO {
 		return senha;
 	}
 
+	@SuppressWarnings("unchecked")
 	public Senha buscaProximaSenha(String proxChamada, String servico, String subservico) {
 		Query query = manager.createQuery(
 				"select s from Senha s where s.tipo = :tipo and s.servico.id = :servico and s.subservico.id = :subservico and s.status = 'aguardando' order by tipo desc, data_entrada");
@@ -237,7 +199,7 @@ public class SenhaDAO {
 		query.setParameter("subservico", (Integer.parseInt(subservico)));
 		query.setMaxResults(1);
 
-		List senha = query.getResultList();
+		List<Senha> senha = query.getResultList();
 
 		if (senha.size() == 0) {
 			query = manager.createQuery(

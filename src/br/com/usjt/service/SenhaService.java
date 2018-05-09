@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.usjt.dao.SenhaDAO;
 import br.com.usjt.entity.Senha;
@@ -17,13 +18,8 @@ public class SenhaService {
 		this.senhaDAO = senhaDAO;
 	}
 	
-	
 	public void gerarSenha(Senha senha) {
 		senhaDAO.gerarSenha(senha);
-	}
-	
-	public Senha gerarGetSenha(Senha senha) {
-		return senhaDAO.gerarGetSenha(senha);
 	}
 	
 	public Senha loadSenha(int id) {

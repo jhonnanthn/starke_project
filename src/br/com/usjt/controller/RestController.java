@@ -3,8 +3,6 @@ package br.com.usjt.controller;
 import java.io.IOException;
 import java.util.List;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +17,7 @@ import br.com.usjt.service.AtendimentoService;
 import br.com.usjt.service.SenhaService;
 import br.com.usjt.service.ServicoService;
 import br.com.usjt.service.SubservicoService;
-@Transactional
+
 @org.springframework.web.bind.annotation.RestController
 public class RestController {
 
@@ -51,9 +49,10 @@ public class RestController {
 		senhas = senhaS.listarSenha();
 		return senhas;
 	}
+	
 
 	@RequestMapping(method = RequestMethod.GET, value = "rest/criar_senha/{tipo}/{id_servico}")
-	public @ResponseBody Senha listarChamados(@PathVariable("tipo") String tipo,
+	public synchronized @ResponseBody Senha listarChamados(@PathVariable("tipo") String tipo,
 			@PathVariable("id_servico") String idServico) {
 
 		Senha senha = new Senha();
@@ -65,9 +64,12 @@ public class RestController {
 		Atendimento atendimento = new Atendimento();
 		atendimento.setSenha(senha);
 		atendimento.setSubservico(subservico);
-		senha = senhaS.gerarGetSenha(senha);
+		
+		senhaS.gerarSenha(senha);
+		
 		atendimentoS.gerarAtendimento(atendimento);
 
 		return senha;
 	}
+	
 }
