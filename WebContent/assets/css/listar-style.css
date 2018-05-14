@@ -42,6 +42,7 @@ header .s-header-listar:before{
 	position: fixed;
     width: 100%;
     font-family: 'Dosis', sans-serif;
+    margin-bottom: 20px;
 }
 
 .s-container-lista section.table div.tbody{

@@ -26,7 +26,6 @@
 							<p>Status</p>
 							<p>Horário Chegada</p>
 							<p>Estimativa</p>
-
 							<p>Fim do Atendimento</p>
 						</div>
 					</div>
@@ -50,8 +49,8 @@
 		<script>
 		$(document).ready(function(){
 			setTimeout(function(){
-				document.location.href = "senha_listar";
-			},30000);
+				location.reload();
+			},10000);
 		});</script>
 	</body>
 </html>

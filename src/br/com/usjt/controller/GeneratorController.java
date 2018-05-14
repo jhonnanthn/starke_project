@@ -115,7 +115,7 @@ public class GeneratorController {
 				proxChamada = (int) proxChamada + 1;
 			session.setAttribute("proximaChamada", proxChamada);
 			Senha senha = senhaService.buscaProximaSenha(tipo, servico, subservico);
-			senha.setStatus("atendimento");
+			senha.setStatus("senha chamada");
 			senhaService.updateSenha(senha);
 
 			Atendimento atendimento = atendimentoService.loadAtendimento(senha);
@@ -194,7 +194,7 @@ public class GeneratorController {
 	public String atenderSenha(@RequestParam(name="id") int id,Model model) {
 		try {
 			Senha senha = senhaService.loadSenha(id);
-			senha.setStatus("atendimento");
+			senha.setStatus("sendo chamada");
 			senhaService.updateSenha(senha);
 			
 			Atendimento atendimento = atendimentoService.loadAtendimento(senha);
