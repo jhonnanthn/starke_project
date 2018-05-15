@@ -5,6 +5,10 @@ body div.container{
     margin-left: 60px;
 }
 
+body div.container .active{
+	overflow: hidden;
+}
+
 header.s-header li a svg path{
     fill: #ff396e;
 }
@@ -105,7 +109,8 @@ header .s-header-atender:before{
     outline: none;
 }
 
-.s-container-result section.table{
+.s-container-result section.table
+.modal-container section.table-processos{
     width: 80%;
     text-align: center;
     overflow: auto;
@@ -114,33 +119,38 @@ header .s-header-atender:before{
     left: 20%;
 }
 
-.s-container-result section.table div.thead{
+.s-container-result section.table div.thead
+.modal-container section.table-processos div.thead-processos{
 	/* position: fixed; */
     width: 100%;
     font-family: 'Dosis', sans-serif;
 }
 
-.s-container-result section.table div.tbody{
+.s-container-result section.table div.tbody
+.modal-container section.table-processos div.tbody-processos{
 	padding-top: 30px;
     font-family: 'Montserrat', sans-serif;
     text-transform: capitalize;
 }
 
-.s-container-result section.table div .table-line{
+.s-container-result section.table div .table-line,
+.modal-container section.table-processos div .table-line{
     display: flex;
     align-items: center;
     text-align: center;
 	width: 100%;	
 }
 
-.s-container-result section.table div.thead .table-line{
+.s-container-result section.table div.thead .table-line,
+.modal-container section.table-processos div.thead .table-line{
     background: #231f20;
     color: 	#ff396e;
     text-transform: uppercase;
     font-size: 16px;
 }
 
-.s-container-result section.table .table-line p{
+.s-container-result section.table .table-line p,
+.modal-container section.table-processos .table-line p{
 	padding: 5px;
 	width: 25%;
 }
@@ -149,4 +159,43 @@ header .s-header-atender:before{
 	position: absolute;
 	bottom: 10%;
 	left: 20%;
+}
+
+body div.modal-container{
+	position: fixed;
+	display: none;
+	top: 0;
+	z-index: 9;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(3,3,3,.6);
+}
+
+.modal-container .modal-main{
+	position: absolute;
+	width: 60%;
+	height: 60%;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background: #231f20;
+	color: #fff;
+	text-align: center;
+}
+
+
+.modal-container .modal-main > h2{
+	text-transform: uppercase;
+	font-family: 'Lora', sans-serif;
+    font-size: 25px;
+    margin: 20px 0;
+    font-weight: 100;
+}
+
+
+.modal-container .modal-main p.modal-pass,
+.modal-container .modal-main p.modal-type{
+	font-size: 17spx;
+    font-family: 'Dosis', sans-serif;
+    text-transform: uppercase;
 }

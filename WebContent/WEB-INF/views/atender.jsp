@@ -61,6 +61,29 @@
 				<button class="form-control btn btn-primary encerrar">Encerrar Atendimento</button>
 			</div>
 		</div> 
+		<div class="modal-container">
+			<div class="modal-main">
+				<div class="flag-top"></div>
+				<h2>Atendimento em andamento</h2>
+				<p class="modal-pass">CJ009</p>
+				<p class="modal-type">comum</p>
+				<div class="modal-process">
+					<h2>Processos</h2>
+					<section class="table-processos">
+						<div class="thead-processos">
+							<div class="table-line">
+								<p>Serviço</p>
+								<p>Status</p>
+								<p>Horário de Início</p>
+								<p>Horário de Término</p>
+							</div>
+						</div>
+						<div class="tbody-processos">
+						</div>
+					</section>
+				</div>
+			</div>
+		</div>
 		<script src="assets/js/jquery-3.3.1.min.js"></script>
 		<script src="assets/js/popper.min.js"></script>	
 		<script src="assets/js/script.js"></script>	
