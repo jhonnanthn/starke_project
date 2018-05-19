@@ -12,9 +12,9 @@
 		<title>FilaStarke</title>
 		<link href="assets/css/geral-style.css" rel="stylesheet">
 		<link href="assets/css/atender-style.css" rel="stylesheet">
-		  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
- 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" href="assets/css/bootstrap.min.css">
+  		<script src="assets/js/jquery-3.3.1.min.js"></script>
+ 		<script src="assets/js/bootstrap.min.js"></script>
 	</head>
 	<body>
 		<c:import url="nav.jsp" />
@@ -125,8 +125,8 @@
 		<script src="assets/js/jquery-3.3.1.min.js"></script>
 		<script src="assets/js/popper.min.js"></script>	
 		<script src="assets/js/script.js"></script>	
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+		<script src="assets/js/bootstrap-3-3-1.min.js"></script>
+		<script src="assets/js/sweetalert.min.js"></script>
 		
 		<script>
 			var senhaChamada = null;
