@@ -126,6 +126,7 @@
 		<script src="assets/js/popper.min.js"></script>	
 		<script src="assets/js/script.js"></script>	
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 		
 		<script>
 			var senhaChamada = null;
@@ -139,7 +140,7 @@
   			    	},
       				success: function(result){
       					if(result == "" || result == null){
-      						
+              				swal("Error!", "Não foi possível identificar a senha.", "error");
       					} else{
       						senhaChamada = result;  
       						$(".senha").text(result.nome);
@@ -147,7 +148,7 @@
       					}
           			},
           			error: function(result){
-      					console.log(result);               			
+          				swal("Error!", "Não foi possível atender a senha.", "error");
           			}
       			});
 			});
@@ -160,10 +161,13 @@
   			    		id : senhaChamada.id
   			    	},
       				success: function(result){
-      					console.log(result);               			
+      					swal("Senha encerrada com sucesso.")
+      					.then((value) => {
+          					location.reload(true);
+      					});
           			},
           			error: function(result){
-      					console.log(result);               			
+          				swal("Error!", "Não foi possível encerrar a senha.", "error");
           			}
       			});
 			});
@@ -176,10 +180,9 @@
   			    		id : senhaChamada.id
   			    	},
       				success: function(result){
-      					console.log(result);               			
           			},
           			error: function(result){
-      					console.log(result);               			
+          				swal("Error!", "Não foi possível prosseguir com a senha.", "error");
           			}
       			});
 			});
@@ -192,10 +195,13 @@
   			    		senha : senhaChamada.id
   			    	},
       				success: function(result){
-      					console.log(result);               			
+      					swal("Senha encaminhada com sucesso.")
+      					.then((value) => {
+          					location.reload(true);
+      					});
           			},
           			error: function(result){
-      					console.log(result);               			
+          				swal("Error!", "Não foi possível encaminhar a senha.", "error");
           			}
       			});
 			});
@@ -208,10 +214,13 @@
   			    		id : senhaChamada.id
   			    	},
       				success: function(result){
-      					console.log(result);               			
+      					swal("Senha finalizada com sucesso.")
+      					.then((value) => {
+          					location.reload(true);
+      					});
           			},
           			error: function(result){
-      					console.log(result);               			
+          				swal("Error!", "Não foi possível finalizar a senha.", "error");
           			}
       			});
 			});
