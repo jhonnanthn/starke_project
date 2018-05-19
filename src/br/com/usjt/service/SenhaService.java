@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import br.com.usjt.dao.SenhaDAO;
 import br.com.usjt.entity.Senha;
@@ -45,5 +44,9 @@ public class SenhaService {
 	
 	public Senha buscaProximaSenha(String proximaChamada, String servico, String subservico) {
 		return senhaDAO.buscaProximaSenha(proximaChamada, servico, subservico);
+	}
+
+	public void finalizaSenha(Senha senha) {
+		senhaDAO.finalizaSenha(senha);
 	}
 }

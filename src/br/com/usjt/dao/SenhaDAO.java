@@ -230,4 +230,25 @@ public class SenhaDAO {
 		return (Senha) senha.get(0);
 
 	}
+
+	public void finalizaSenha(Senha senha) {
+		Query querySenha = manager
+				.createQuery("select a from Senha a where a.id = :id");
+		querySenha.setParameter("id", senha.getId());
+		Senha atualizaSenha = (Senha) querySenha.getSingleResult();
+		atualizaSenha.setStatus("finalizado");
+		atualizaSenha.setDataSaida(new Date());
+		manager.merge(atualizaSenha);
+		
+		// finaliza o Atendimento
+		Query queryAtendimento = manager
+				.createQuery("select a from Atendimento a where a.subservico.id = :subservico and a.senha.id = :id");
+		queryAtendimento.setParameter("id", senha.getId());
+		queryAtendimento.setParameter("subservico", senha.getSubservico().getId());
+		Atendimento atendimento = (Atendimento) queryAtendimento.getSingleResult();
+		atendimento.setDataSaida(new Date());
+		long l = (atendimento.getDataSaida().getTime() - atendimento.getDataGerado().getTime()) / 1000;
+		atendimento.setDuracao((int) l / 60);
+		manager.merge(atendimento);
+	}
 }

@@ -12,9 +12,47 @@
 		<title>FilaStarke</title>
 		<link href="assets/css/geral-style.css" rel="stylesheet">
 		<link href="assets/css/atender-style.css" rel="stylesheet">
+		  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+ 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	</head>
 	<body>
 		<c:import url="nav.jsp" />
+		<!-- Modal -->
+		<div class="modal fade" data-backdrop="static" id="modalProsseguir" role="dialog">
+		    <div class="modal-dialog">
+		      <div class="modal-content">
+		        <div class="modal-header">
+		          <h4 class="modal-title">Atender Senha</h4>
+		        </div>
+		        <div class="modal-body">
+		          	<p>A senha <span class="senha"></span> está sendo chamada no painel. Qual ação deseja realizar?</p>
+		        		<div class="">
+		          		<button type="button" class="btn btn-success btnProsseguir" data-dismiss="modal" data-toggle="modal" data-target="#modalEncaminhar">Prosseguir</button>
+		        			<button type="button" class="btn btn-danger btnFinalizar" data-dismiss="modal">Cancelar</button>
+		        		</div>
+		        </div>
+		      </div>
+		    </div>
+		</div>
+		
+		<!-- Modal -->
+		<div class="modal fade" data-backdrop="static" id="modalEncaminhar" role="dialog">
+		    <div class="modal-dialog">
+		      <div class="modal-content">
+		        <div class="modal-header">
+		          <h4 class="modal-title">Atendendo senha: <span class="senha"></span></h4>
+		        </div>
+		        <div class="modal-body">
+		          	<p>A senha <span class="senha"></span> está sendo atendida. Qual ação deseja realizar agora?</p>
+		        		<div class="">
+		          		<button type="button" class="btn btn-success btnEncaminhar" data-dismiss="modal" data-toggle="modal">Encaminhar</button>
+		        			<button type="button" class="btn btn-danger encerrar" data-dismiss="modal">Cancelar</button>
+		        		</div>
+		        </div>
+		      </div>
+		    </div>
+		</div>
 		<div class="container">
 			<section class="s-container">
 				<!--  <input type="hidden" name="proximaChamada" id="proximaChamada" value="${proximaChamada }"> -->
@@ -58,7 +96,7 @@
 			</section>
 			<div class="form-group input-table">
 				<button class="form-control btn btn-primary atender">Atender</button>
-				<button class="form-control btn btn-primary encerrar">Encerrar Atendimento</button>
+<!-- 				<button class="form-control btn btn-primary encerrar">Encerrar Atendimento</button> -->
 			</div>
 		</div> 
 		<div class="modal-container">
@@ -87,7 +125,10 @@
 		<script src="assets/js/jquery-3.3.1.min.js"></script>
 		<script src="assets/js/popper.min.js"></script>	
 		<script src="assets/js/script.js"></script>	
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		
 		<script>
+			var senhaChamada = null;
 			$(".input-table .atender").click(function(e){
 				$.ajax({
       			    type : "GET",
@@ -95,6 +136,28 @@
       				data : {
   			    		servico : $("#senha_servico option:selected").val(),
   			    		subservico : $("#subServico option:selected").val()
+  			    	},
+      				success: function(result){
+      					if(result == "" || result == null){
+      						
+      					} else{
+      						senhaChamada = result;  
+      						$(".senha").text(result.nome);
+      						$('#modalProsseguir').modal('show');
+      					}
+          			},
+          			error: function(result){
+      					console.log(result);               			
+          			}
+      			});
+			});
+			
+			$(".encerrar").click(function(e){
+				$.ajax({
+      			    type : "GET",
+      				url: "${pageContext.request.contextPath}/finalizaSenha", 
+      				data : {
+  			    		id : senhaChamada.id
   			    	},
       				success: function(result){
       					console.log(result);               			
@@ -105,12 +168,44 @@
       			});
 			});
 			
-			$(".input-table .encerrar").click(function(e){
+			$(".btnProsseguir").click(function(e){
+				$.ajax({
+      			    type : "GET",
+      				url: "${pageContext.request.contextPath}/atenderSenha_prosseguir", 
+      				data : {
+  			    		id : senhaChamada.id
+  			    	},
+      				success: function(result){
+      					console.log(result);               			
+          			},
+          			error: function(result){
+      					console.log(result);               			
+          			}
+      			});
+			});
+			
+			$(".btnEncaminhar").click(function(e){
 				$.ajax({
       			    type : "GET",
       				url: "${pageContext.request.contextPath}/senha_proxima", 
       				data : {
-  			    		senha : $("#senha0").data("id")
+  			    		senha : senhaChamada.id
+  			    	},
+      				success: function(result){
+      					console.log(result);               			
+          			},
+          			error: function(result){
+      					console.log(result);               			
+          			}
+      			});
+			});
+			
+			$(".btnFinalizar").click(function(e){
+				$.ajax({
+      			    type : "GET",
+      				url: "${pageContext.request.contextPath}/atenderSenha_cancelar", 
+      				data : {
+  			    		id : senhaChamada.id
   			    	},
       				success: function(result){
       					console.log(result);               			

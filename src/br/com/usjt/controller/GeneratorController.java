@@ -95,7 +95,7 @@ public class GeneratorController {
 	
 	@RequestMapping(value = "/atender_proxima_senha", method = RequestMethod.GET)
 	@ResponseBody
-	public void atenderSenha(HttpSession session, HttpServletResponse response, Model model, @RequestParam(name="servico")String servico, 
+	public Senha atenderSenha(HttpSession session, HttpServletResponse response, Model model, @RequestParam(name="servico")String servico, 
 			@RequestParam(name="subservico")String subservico) {
 		try {
 //			List<Senha> senhas = senhaService.listarSenhasAtendimento(servico, Integer.parseInt(subservico));
@@ -122,14 +122,29 @@ public class GeneratorController {
 			atendimento.setDataEntrada(new Date());
 			atendimento.setEspera((int) ((atendimento.getDataEntrada().getTime()-atendimento.getDataGerado().getTime())/1000/60));
 			atendimentoService.updateAtendimento(atendimento);
-//			return atendimento;
-			
+			return senha;
 		} catch (Exception e) {
 			e.printStackTrace();
-//			return null;
+			return null;
 		}
 	}
 	
+	@RequestMapping(value = "/atenderSenha_prosseguir", method = RequestMethod.GET)
+	@ResponseBody
+	public void atenderSenha_prosseguir(HttpSession session, HttpServletResponse response, Model model, @RequestParam(name="id") int id) {
+		Senha senha = senhaService.loadSenha(id);
+		senha.setStatus("atendimento");
+		senhaService.updateSenha(senha);
+	}
+	
+	@RequestMapping(value = "/atenderSenha_cancelar", method = RequestMethod.GET)
+	@ResponseBody
+	public void atenderSenha_cancelado(HttpSession session, HttpServletResponse response, Model model, @RequestParam(name="id") int id) {
+		Senha senha = senhaService.loadSenha(id);
+		senha.setStatus("cancelado");
+		senha.setDataSaida(new Date());
+		senhaService.updateSenha(senha);
+	}	
 	@RequestMapping("/senha_proxima")
 	public String proximaSenha(int senha,Model model) {
 		try {
@@ -147,6 +162,18 @@ public class GeneratorController {
 		try {
 			List<Senha> senhas = senhaService.listarSenhasAtendimento(servico, Integer.parseInt(subservico));
 			return senhas;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	@RequestMapping(value = "/finalizaSenha", method = RequestMethod.GET)
+	public @ResponseBody String finalizaSenha(HttpSession session, HttpServletResponse response, Model model, int id) {			
+		try {
+			Senha senha = senhaService.loadSenha(id);
+			senhaService.finalizaSenha(senha);
+			return "finalizado";
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
