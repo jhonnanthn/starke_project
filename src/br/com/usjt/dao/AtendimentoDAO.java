@@ -1,6 +1,7 @@
 package br.com.usjt.dao;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -31,6 +32,14 @@ public class AtendimentoDAO {
 		query.setParameter("id", senha.getSubservico().getId());
 		query.setParameter("id2", senha.getId());
 		Atendimento atendimento = (Atendimento) query.getSingleResult();
+		return atendimento;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Atendimento> loadAtendimentos(int senha) {
+		Query query = manager.createQuery("select a from Atendimento a inner join a.senha as s where a.senha.id = :id");
+		query.setParameter("id", senha);
+		List<Atendimento> atendimento = (List<Atendimento>) query.getResultList();
 		return atendimento;
 	}
 

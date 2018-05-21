@@ -42,7 +42,7 @@ header .s-header-atender:before{
 .s-container-form{
     height: 80%;
     overflow: hidden;
-    width: 25%;
+    width: 30%;
     box-shadow: 5px 12px 27px 0px #ccc;
 }
 
@@ -95,103 +95,223 @@ header .s-header-atender:before{
     background: #231f20;
     width: 50%;
     border: 0;
+    border-radius: 0;
     box-shadow: none;
     font-weight: 600;
     color: 	#ff396e;
-    padding: 10px;
+    padding: 0;
     font-size: 16px;
     text-transform: uppercase;
     font-family: 'Montserrat', sans-serif;
     margin-top: 40px;
     position: relative;
+    height: 40px;
     /* box-shadow: 5px 5px 7px #ccc; */
     left: 50%;
     outline: none;
 }
 
-.s-container-result section.table
-.modal-container section.table-processos{
-    width: 80%;
+.modal-process{
+	margin: 15px 0;
+}
+
+.s-container-result section.table{
+    width: 90%;
     text-align: center;
     overflow: auto;
     height: 100%;
     position: relative;
-    left: 20%;
+    left: 10%;
 }
 
-.s-container-result section.table div.thead
-.modal-container section.table-processos div.thead-processos{
+section.table-processos{
+    width: 100%;
+    text-align: center;
+    overflow: auto;
+    height: 100%;
+    position: relative;
+    border: 1px solid #fff;
+}
+
+.s-container-result section.table div.thead,
+section.table-processos div.thead-processos{
 	/* position: fixed; */
     width: 100%;
     font-family: 'Dosis', sans-serif;
 }
 
-.s-container-result section.table div.tbody
-.modal-container section.table-processos div.tbody-processos{
-	padding-top: 30px;
+.s-container-result section.table div.tbody,
+section.table-processos div.tbody-processos{
     font-family: 'Montserrat', sans-serif;
     text-transform: capitalize;
 }
 
 .s-container-result section.table div .table-line,
-.modal-container section.table-processos div .table-line{
+section.table-processos div .table-line{
     display: flex;
-    align-items: center;
+    /* align-items: center; */
     text-align: center;
 	width: 100%;	
 }
 
 .s-container-result section.table div.thead .table-line,
-.modal-container section.table-processos div.thead .table-line{
+section.table-processos div.thead-processos .table-line{
     background: #231f20;
     color: 	#ff396e;
     text-transform: uppercase;
     font-size: 16px;
 }
 
+section.table-processos .table-line p{
+    border-right: 1px solid #fff;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+}
+
+section.table-processos .table-line p:last-child{
+	border-right: 0;
+}
+
+
+section.table-processos .table-line{
+    border-bottom: 1px solid #fff;	
+}
+
+
+section.table-processos .tbody-processos .table-line:last-child{
+    border-bottom: 0;	
+}
+
 .s-container-result section.table .table-line p,
-.modal-container section.table-processos .table-line p{
+section.table-processos .table-line p{
 	padding: 5px;
 	width: 25%;
+	margin: 0;
 }
 
 .input-table{
 	position: absolute;
-	bottom: 10%;
-	left: 20%;
-}
-
-body div.modal-container{
-	position: fixed;
+	bottom: 5%;
+	left: 8%;
 	display: none;
-	top: 0;
-	z-index: 9;
-	width: 100%;
-	height: 100%;
-	background-color: rgba(3,3,3,.6);
+	margin: 0;
 }
 
-.modal-container .modal-main{
-	position: absolute;
-	width: 60%;
-	height: 60%;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	background: #231f20;
-	color: #fff;
-	text-align: center;
+.input-table .atender,
+.input-table .atender:hover,
+.input-table .atender:active,
+.input-table .atender:focus{
+	border: 0;
+    height: 40px;
+    border-radius: 0;
+    text-transform: uppercase;
+    font-weight: bold;
+    background: #ff396e;
+    font-family: 'Montserrat', sans-serif;
 }
 
+.modal .modal-content, .swal-overlay--show-modal .swal-modal{
+	background-color: #231f20;
+    color: #fff;
+    border-radius: 0;
+    border: 0;
+    padding: 20px;
+}
 
-.modal-container .modal-main > h2{
+ .swal-overlay--show-modal .swal-modal .swal-title{
+ 	color: #fff; 
+    font-family: 'Lora', sans-serif;
+    text-transform: uppercase;
+    font-weight: normal;
+ }
+ 
+ .swal-overlay--show-modal .swal-modal .swal-text{
+ 	color: #fff; 
+    font-weight: normal;
+    font-family: 'Dosis', sans-serif;
+    font-size: 20px;
+ }
+ 
+ .swal-overlay--show-modal .swal-modal .swal-button,
+ .swal-overlay--show-modal .swal-modal .swal-button:hover,
+ .swal-overlay--show-modal .swal-modal .swal-button:active,
+ .swal-overlay--show-modal .swal-modal .swal-button:focus{
+ 	border: 0;
+ 	border-radius: 0 ;
+    box-shadow: none !important;
+    background: #ff396e !important;
+ }
+ 
+ .swal-overlay--show-modal .swal-modal .swal-footer{
+ 	text-align: center;
+ }
+
+.modal-header .modal-title{
 	text-transform: uppercase;
 	font-family: 'Lora', sans-serif;
     font-size: 25px;
-    margin: 20px 0;
+    margin: 0 0 15px;
+    font-weight: 100;
+    text-align: center;
+}
+
+.modal-body .modal-title{
+	text-transform: uppercase;
+    font-family: 'Lora', sans-serif;
+    text-align: center;
+    font-size: 40px;
     font-weight: 100;
 }
 
+.modal-button{
+	margin-top: 20px;
+}
+
+.modal-button button{
+    border: 0;
+    border-radius: 0;
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    font-weight: bold;
+    outline: none;
+    height: 35px;
+    padding: 0 20px;
+}
+
+.modal-button button.encerrar, 
+.modal-button button.btnFinalizar{
+	background: transparent;
+    border: 2px solid #fff;
+}
+
+.modal-button .btnEncaminhar, 
+.modal-button .btnProsseguir{
+	float: right;
+}
+
+.modal-body .nome-servico,
+.modal-body .tipo-servico,
+.modal-body .modal-subtitle{
+    font-size: 16px;
+    text-transform: uppercase;
+    color: #fff;
+    font-family: 'Dosis', sans-serif;
+    width: 100%;
+    text-align: center;
+    margin: 0;
+}
+
+.modal-body div h2{
+	text-align: center;
+	font-size: 19px;
+    text-transform: uppercase;
+    font-family: 'Lora', sans-serif;
+}
+
+.modal-body .modal-subtitle{
+	font-family: 'Montserrat', sans-serif
+}
 
 .modal-container .modal-main p.modal-pass,
 .modal-container .modal-main p.modal-type{

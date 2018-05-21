@@ -26,11 +26,11 @@
 		          <h4 class="modal-title">Atender Senha</h4>
 		        </div>
 		        <div class="modal-body">
-		          	<p>A senha <span class="senha"></span> está sendo chamada no painel. Qual ação deseja realizar?</p>
-		        		<div class="">
-		          		<button type="button" class="btn btn-success btnProsseguir" data-dismiss="modal" data-toggle="modal" data-target="#modalEncaminhar">Prosseguir</button>
-		        			<button type="button" class="btn btn-danger btnFinalizar" data-dismiss="modal">Cancelar</button>
-		        		</div>
+		          	<p class="modal-subtitle">A senha <span class="senha"></span> está sendo chamada no painel. <br/>Qual ação deseja realizar?</p>
+	        		<div class="modal-button">
+	          			<button type="button" class="btn btn-success btnProsseguir" data-dismiss="modal" data-toggle="modal">Prosseguir</button>
+	        			<button type="button" class="btn btn-danger btnFinalizar" data-dismiss="modal">Cancelar</button>
+	        		</div>
 		        </div>
 		      </div>
 		    </div>
@@ -41,18 +41,37 @@
 		    <div class="modal-dialog">
 		      <div class="modal-content">
 		        <div class="modal-header">
-		          <h4 class="modal-title">Atendendo senha: <span class="senha"></span></h4>
+		          <h4 class="modal-title">Atendendo senha</h4>
 		        </div>
 		        <div class="modal-body">
-		          	<p>A senha <span class="senha"></span> está sendo atendida. Qual ação deseja realizar agora?</p>
-		        		<div class="">
-		          		<button type="button" class="btn btn-success btnEncaminhar" data-dismiss="modal" data-toggle="modal">Encaminhar</button>
-		        			<button type="button" class="btn btn-danger encerrar" data-dismiss="modal">Cancelar</button>
-		        		</div>
+		         	<h2 class="modal-title"><span class="senha"></span></h2>
+		          	<p class="nome-servico"></p>
+					<div class="modal-process">
+						<h2>Processos</h2>
+						<section class="table-processos">
+							<div class="thead-processos">
+								<div class="table-line">
+									<p>Serviço</p>
+									<p>Status</p>
+									<p>Início</p>
+									<p>Término</p>
+								</div>
+							</div>
+							<div class="tbody-processos">
+								
+							</div>
+						</section>
+					</div>
+	        		<p class="modal-subtitle">A senha <span class="senha"></span> está sendo atendida. <br/>Qual ação deseja realizar agora?</p>
+	        		<div class="modal-button">
+	          			<button type="button" class="btn btn-success btnEncaminhar" data-dismiss="modal" data-toggle="modal">Encaminhar</button>
+	        			<button type="button" class="btn btn-danger encerrar" data-dismiss="modal">Cancelar</button>
+	        		</div>
 		        </div>
 		      </div>
 		    </div>
 		</div>
+		
 		<div class="container">
 			<section class="s-container">
 				<!--  <input type="hidden" name="proximaChamada" id="proximaChamada" value="${proximaChamada }"> -->
@@ -99,29 +118,6 @@
 <!-- 				<button class="form-control btn btn-primary encerrar">Encerrar Atendimento</button> -->
 			</div>
 		</div> 
-		<div class="modal-container">
-			<div class="modal-main">
-				<div class="flag-top"></div>
-				<h2>Atendimento em andamento</h2>
-				<p class="modal-pass">CJ009</p>
-				<p class="modal-type">comum</p>
-				<div class="modal-process">
-					<h2>Processos</h2>
-					<section class="table-processos">
-						<div class="thead-processos">
-							<div class="table-line">
-								<p>Serviço</p>
-								<p>Status</p>
-								<p>Horário de Início</p>
-								<p>Horário de Término</p>
-							</div>
-						</div>
-						<div class="tbody-processos">
-						</div>
-					</section>
-				</div>
-			</div>
-		</div>
 		<script src="assets/js/jquery-3.3.1.min.js"></script>
 		<script src="assets/js/popper.min.js"></script>	
 		<script src="assets/js/script.js"></script>	
@@ -180,6 +176,34 @@
   			    		id : senhaChamada.id
   			    	},
       				success: function(result){
+      					console.log(result);
+      					$("#modalEncaminhar .nome-servico").html(result.servico.nome + " - " + result.tipo);
+      					$.ajax({
+      	      			    type : "GET",
+      	      				url: "${pageContext.request.contextPath}/load_processos", 
+      	      				data : {
+      	  			    		id : senhaChamada.id
+      	  			    	},
+      	      				success: function(data){
+      	      					console.log(data);
+      	      					$(".tbody-processos").html("");
+      	      					for (var i = 0; i < data.length; i++) {
+      	      						var entrada = new Date(data[i].dataEntrada);
+      	      						var saida = data[i].dataSaida ? new Date(data[i].dataSaida) : null;
+	      	      					$(".tbody-processos").append('<div class="table-line"><p>' + data[i].subservico.nome +
+	      	      						'</p><p>Status</p>' +
+	  	      							'<p>' + truncate(entrada.getHours(), 2) + ':' + truncate(entrada.getMinutes(), 2) + 
+	  	      							':' + truncate(entrada.getSeconds(), 2) + '</p><p>' +
+	  	      							(saida ? truncate(saida.getHours(), 2) + ':' + truncate(saida.getMinutes(), 2) + 
+	  		  	      					':' + truncate(saida.getSeconds(), 2) : '-') + '</p></div>');
+								}
+      	      					$("#modalEncaminhar").modal();
+      	          			},
+      	          			error: function(data){
+      	      					console.log(data);
+      	          				//swal("Error!", "Não foi possível prosseguir com a senha.", "error");
+      	          			}
+      	      			});
           			},
           			error: function(result){
           				swal("Error!", "Não foi possível prosseguir com a senha.", "error");
@@ -252,7 +276,7 @@
       			    },
       				url: "${pageContext.request.contextPath}/listar_senhas_atendimento", 
       				success: function(result){
-      					console.log(result);
+      					//console.log(result);
       					$(".tbody").html("");
       					if(result.length == 0)
       						$(".input-table").hide();

@@ -89,7 +89,7 @@ public class SenhaDAO {
 		q.setMaxResults(20);
 		return q.getResultList();
 	}
-
+	
 	public void updateSenha(Senha senha) {
 		manager.merge(senha);
 	}

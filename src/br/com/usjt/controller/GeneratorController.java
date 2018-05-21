@@ -130,11 +130,20 @@ public class GeneratorController {
 	}
 	
 	@RequestMapping(value = "/atenderSenha_prosseguir", method = RequestMethod.GET)
-	@ResponseBody
-	public void atenderSenha_prosseguir(HttpSession session, HttpServletResponse response, Model model, @RequestParam(name="id") int id) {
+	public @ResponseBody Senha atenderSenha_prosseguir(HttpSession session, HttpServletResponse response, Model model, @RequestParam(name="id") int id) {
 		Senha senha = senhaService.loadSenha(id);
+		List<Atendimento> atendimentos = atendimentoService.loadAtendimentos(id);
 		senha.setStatus("atendimento");
 		senhaService.updateSenha(senha);
+//		senha.setAtendimentos(atendimentos);
+		return senha;
+	}
+	
+
+	@RequestMapping(value = "/load_processos", method = RequestMethod.GET)
+	public @ResponseBody List<Atendimento> loadProcessor(HttpSession session, HttpServletResponse response, Model model, @RequestParam(name="id") int id) {
+		List<Atendimento> atendimentos = atendimentoService.loadAtendimentos(id);
+		return atendimentos;
 	}
 	
 	@RequestMapping(value = "/atenderSenha_cancelar", method = RequestMethod.GET)

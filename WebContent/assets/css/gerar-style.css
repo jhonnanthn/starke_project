@@ -101,6 +101,7 @@ header .s-header-gerar:before{
     font-weight: 600;
     left: 50%;
     outline: none;
+    cursor: pointer;
 }
 
 .s-container-cupom div.circle{

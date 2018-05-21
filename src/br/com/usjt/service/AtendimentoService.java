@@ -1,5 +1,7 @@
 package br.com.usjt.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,10 @@ public class AtendimentoService {
 	
 	public Atendimento loadAtendimento(Senha senha) {
 		return atendimentoDAO.loadAtendimento(senha);
+	}
+
+	public List<Atendimento> loadAtendimentos(int senha) {
+		return atendimentoDAO.loadAtendimentos(senha);
 	}
 	public void updateAtendimento(Atendimento atendimento) {
 		atendimentoDAO.updateAtendimento(atendimento);
