@@ -44,13 +44,13 @@ public class GeneratorController {
 	 * @return
 	 */
 	@RequestMapping("index")
-	public String inicio(HttpSession session) {
+	public String inicio(HttpSession session, Model model) {
 		Object proxChamada;
 		proxChamada = (Object) session.getAttribute("proximaChamada");
 		if(proxChamada == null)
 			proxChamada = 1;
 			session.setAttribute("proximaChamada", proxChamada);
-		return "index";
+		return listarSenhas(model);
 	}
 	
 	// Carrega Servicos
