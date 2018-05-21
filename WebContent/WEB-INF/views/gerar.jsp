@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 
@@ -48,7 +49,9 @@
 							<h2 class="cupom-servico">${atendimento.senha.nome}</h2>
 							<p class="nome-servico">${atendimento.senha.servico.nome}</p>
 							<p class="tipo-servico">${atendimento.senha.tipo}</p>
-							<p class="tempo-servico"> 00h00 - 00h00</p>
+							<p class="tempo-servico"> 
+							<fmt:formatDate pattern = "HH:mm" value = "${atendimento.senha.estimativaFila}" /> - 
+							<fmt:formatDate pattern = "HH:mm" value = "${atendimento.senha.estimativaAtendimento}" /></p>
 						</c:if>
 					</div>
 					<div class="circle"></div>

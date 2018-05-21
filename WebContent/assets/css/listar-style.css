@@ -58,6 +58,17 @@ header .s-header-listar:before{
 	width: 100%;	
 }
 
+.s-container-lista section.table div .table-line.senha.chamada{
+	background: rgba(57, 132, 57, .8);
+	color: #fff;
+}
+
+
+.s-container-lista section.table div .table-line.atendimento{
+	background: rgba(231, 189, 55, .8);
+	color: #fff;
+}
+
 .s-container-lista section.table div.thead .table-line{
     background: rgba(17,100,183,1);
 	background: -moz-linear-gradient(-45deg, rgba(17,100,183,1) 0%, rgba(112,177,241,1) 100%);

@@ -52,7 +52,6 @@
 							<div class="thead-processos">
 								<div class="table-line">
 									<p>Serviço</p>
-									<p>Status</p>
 									<p>Início</p>
 									<p>Término</p>
 								</div>
@@ -191,8 +190,7 @@
       	      						var entrada = new Date(data[i].dataEntrada);
       	      						var saida = data[i].dataSaida ? new Date(data[i].dataSaida) : null;
 	      	      					$(".tbody-processos").append('<div class="table-line"><p>' + data[i].subservico.nome +
-	      	      						'</p><p>Status</p>' +
-	  	      							'<p>' + truncate(entrada.getHours(), 2) + ':' + truncate(entrada.getMinutes(), 2) + 
+	      	      						'</p><p>' + truncate(entrada.getHours(), 2) + ':' + truncate(entrada.getMinutes(), 2) + 
 	  	      							':' + truncate(entrada.getSeconds(), 2) + '</p><p>' +
 	  	      							(saida ? truncate(saida.getHours(), 2) + ':' + truncate(saida.getMinutes(), 2) + 
 	  		  	      					':' + truncate(saida.getSeconds(), 2) : '-') + '</p></div>');

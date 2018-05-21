@@ -183,10 +183,15 @@ section.table-processos .tbody-processos .table-line:last-child{
     border-bottom: 0;	
 }
 
-.s-container-result section.table .table-line p,
-section.table-processos .table-line p{
+.s-container-result section.table .table-line p{
 	padding: 5px;
 	width: 25%;
+	margin: 0;
+}
+
+section.table-processos .table-line p{
+	padding: 5px;
+	width: 34%;
 	margin: 0;
 }
 

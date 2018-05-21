@@ -31,7 +31,7 @@
 					</div>
 					<div class="tbody">
 						<c:forEach var="senha" items="${senhas}">
-                            <div class="table-line">
+                            <div class="table-line ${senha.status}">
 								<p>${senha.nome}</p>
 								<p>${senha.tipo}</p>
 								<p>${senha.status}</p>
