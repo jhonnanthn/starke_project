@@ -50,7 +50,7 @@
 							<p class="nome-servico">${atendimento.senha.servico.nome}</p>
 							<p class="tipo-servico">${atendimento.senha.tipo}</p>
 							<p class="tempo-servico"> 
-							<fmt:formatDate pattern = "HH:mm" value = "${atendimento.senha.estimativaFila}" /> - 
+							<fmt:formatDate pattern = "HH:mm" value = "${atendimento.senha.estimativaFila}" /> -
 							<fmt:formatDate pattern = "HH:mm" value = "${atendimento.senha.estimativaAtendimento}" /></p>
 						</c:if>
 					</div>

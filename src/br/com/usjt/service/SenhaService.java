@@ -25,6 +25,10 @@ public class SenhaService {
 		return senhaDAO.loadSenha(id);
 	}
 	
+	public Senha loadSenha(String id) {
+		return senhaDAO.loadSenha(id);
+	}
+	
 	public void updateSenha(Senha senha) {
 		senhaDAO.updateSenha(senha);
 	}

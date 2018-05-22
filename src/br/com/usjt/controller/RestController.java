@@ -50,6 +50,11 @@ public class RestController {
 		return senhas;
 	}
 	
+	@RequestMapping(method = RequestMethod.GET, value = "rest/senha/{senha}")
+	public @ResponseBody Senha  listarSenha(@PathVariable("senha") String senha) throws IOException {
+		Senha objSenha = senhaS.loadSenha(senha);
+		return objSenha;
+	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "rest/criar_senha/{tipo}/{id_servico}")
 	public synchronized @ResponseBody Senha listarChamados(@PathVariable("tipo") String tipo,

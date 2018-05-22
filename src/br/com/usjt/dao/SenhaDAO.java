@@ -64,6 +64,13 @@ public class SenhaDAO {
 	public Senha loadSenha(int id) {
 		return manager.find(Senha.class, id);
 	}
+	
+	public Senha loadSenha(String nome) {
+		Query query = manager.createQuery("select s from Senha s where s.nome = :nome");
+		query.setParameter("nome", nome);
+		Senha senha = (Senha) query.getSingleResult();
+		return senha;
+	}
 
 	@SuppressWarnings("unchecked")
 	public List<Senha> listarSenha() {
