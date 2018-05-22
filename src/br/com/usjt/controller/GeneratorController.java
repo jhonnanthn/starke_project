@@ -154,6 +154,20 @@ public class GeneratorController {
 		senha.setDataSaida(new Date());
 		senhaService.updateSenha(senha);
 	}	
+	
+	@RequestMapping(value = "/atenderSenha_voltarFila", method = RequestMethod.GET)
+	@ResponseBody
+	public void atenderSenha_voltarFila(HttpSession session, HttpServletResponse response, Model model, @RequestParam(name="id") int id) {
+		Senha senha = senhaService.loadSenha(id);
+		senha.setStatus("em fila");
+		senhaService.updateSenha(senha);
+		
+		Atendimento atendimento = atendimentoService.loadAtendimento(senha);
+		atendimento.setDataEntrada(null);
+		atendimento.setEspera(0);
+		atendimentoService.updateAtendimento(atendimento);
+	}	
+	
 	@RequestMapping("/senha_proxima")
 	public String proximaSenha(int senha,Model model) {
 		try {
