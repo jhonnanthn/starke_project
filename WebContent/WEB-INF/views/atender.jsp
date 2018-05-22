@@ -312,7 +312,7 @@
    								truncate(date.getMonth() + 1, 2) + "/" + date.getFullYear() +
    								" " + truncate(date.getHours(),2) + ":" + truncate(date.getMinutes(),2) + ":" + 
    								truncate(date.getSeconds(),2) +'</p>' +
-   								'<p><button type="button" data-id="' + result[i].id+ '" class="btn btn-danger voltarParaFila' + (result[i].status == 'em fila' ? ' disabled' : '') + '"><i class="fa fa-warning"></i></button></p>' +
+   								'<p><a type="button" data-id="' + result[i].id+ '" class="btn btn-danger voltarParaFila' + (result[i].status == 'em fila' ? ' disabled' : '') + '"><i class="fa fa-warning"></i></a></p>' +
     							'</div>');
 						}
           			}
