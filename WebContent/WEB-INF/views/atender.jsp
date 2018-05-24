@@ -13,6 +13,7 @@
 		<link href="assets/css/geral-style.css" rel="stylesheet">
 		<link href="assets/css/atender-style.css" rel="stylesheet">
 		<link rel="stylesheet" href="assets/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   		<script src="assets/js/jquery-3.3.1.min.js"></script>
  		<script src="assets/js/bootstrap.min.js"></script>
 	</head>
@@ -82,6 +83,7 @@
 								<p>Tipo</p>
 								<p>Status</p>
 								<p>Horário de Início</p>
+								<p>Opção</p>
 							</div>
 						</div>
 						<div class="tbody">
@@ -246,6 +248,26 @@
           			}
       			});
 			});
+			
+			$(document).on("click", ".voltarParaFila",function(e){
+				id = $(this).data("id");
+				$.ajax({
+      			    type : "GET",
+      				url: "${pageContext.request.contextPath}/atenderSenha_voltarFila", 
+      				data : {
+  			    		id : id
+  			    	},
+      				success: function(result){
+      					swal("Senha voltou para a fila com sucesso.")
+      					.then((value) => {
+          					location.reload(true);
+      					});
+          			},
+          			error: function(result){
+          				swal("Error!", "Não foi possível voltar a senha para a fila.", "error");
+          			}
+      			});
+			});
 				
 			$('#senha_servico').change(function(e){
       			$.ajax({
@@ -290,6 +312,7 @@
    								truncate(date.getMonth() + 1, 2) + "/" + date.getFullYear() +
    								" " + truncate(date.getHours(),2) + ":" + truncate(date.getMinutes(),2) + ":" + 
    								truncate(date.getSeconds(),2) +'</p>' +
+   								'<p><a type="button" data-id="' + result[i].id+ '" class="btn btn-danger voltarParaFila' + (result[i].status == 'em fila' ? ' disabled' : '') + '"><i class="fa fa-warning"></i></a></p>' +
     							'</div>');
 						}
           			}

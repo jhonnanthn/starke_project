@@ -154,6 +154,20 @@ public class GeneratorController {
 		senha.setDataSaida(new Date());
 		senhaService.updateSenha(senha);
 	}	
+	
+	@RequestMapping(value = "/atenderSenha_voltarFila", method = RequestMethod.GET)
+	@ResponseBody
+	public void atenderSenha_voltarFila(HttpSession session, HttpServletResponse response, Model model, @RequestParam(name="id") int id) {
+		Senha senha = senhaService.loadSenha(id);
+		senha.setStatus("em fila");
+		senhaService.updateSenha(senha);
+		
+		Atendimento atendimento = atendimentoService.loadAtendimento(senha);
+		atendimento.setDataEntrada(null);
+		atendimento.setEspera(0);
+		atendimentoService.updateAtendimento(atendimento);
+	}	
+	
 	@RequestMapping("/senha_proxima")
 	public String proximaSenha(int senha,Model model) {
 		try {
@@ -223,26 +237,6 @@ public class GeneratorController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
-		}
-	}
-	
-	@RequestMapping("/senha_atender_old")
-	public String atenderSenha(@RequestParam(name="id") int id,Model model) {
-		try {
-			Senha senha = senhaService.loadSenha(id);
-			senha.setStatus("sendo chamada");
-			senhaService.updateSenha(senha);
-			
-			Atendimento atendimento = atendimentoService.loadAtendimento(senha);
-			atendimento.setDataEntrada(new Date());
-			long x = (atendimento.getDataEntrada().getTime()-atendimento.getDataGerado().getTime())/1000;
-			atendimento.setEspera((int) x/60);
-			atendimentoService.updateAtendimento(atendimento);
-			
-			return "gerar";
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "Erro";
 		}
 	}
 	
