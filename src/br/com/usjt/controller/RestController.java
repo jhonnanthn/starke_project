@@ -57,7 +57,7 @@ public class RestController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "rest/criar_senha/{tipo}/{id_servico}")
-	public synchronized @ResponseBody Senha listarChamados(@PathVariable("tipo") String tipo,
+	public @ResponseBody Senha listarChamados(@PathVariable("tipo") String tipo,
 			@PathVariable("id_servico") String idServico) {
 
 		Senha senha = new Senha();

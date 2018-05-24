@@ -17,7 +17,7 @@ public class SenhaService {
 		this.senhaDAO = senhaDAO;
 	}
 	
-	public void gerarSenha(Senha senha) {
+	public synchronized void gerarSenha(Senha senha) {
 		senhaDAO.gerarSenha(senha);
 	}
 	
