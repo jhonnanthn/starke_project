@@ -50,9 +50,17 @@ public class RestController {
 		return senhas;
 	}
 	
+	@RequestMapping(method = RequestMethod.GET, value = "rest/servicos/{senha}")
+	public @ResponseBody List<Atendimento>  listarServicos(@PathVariable("senha") String senha) throws IOException {
+		Senha objSenha = senhaS.loadSenha(senha);
+		List<Atendimento> atendimentos = atendimentoS.loadAtendimentos(objSenha.getId());
+		return atendimentos;
+	}
+	
 	@RequestMapping(method = RequestMethod.GET, value = "rest/senha/{senha}")
 	public @ResponseBody Senha  listarSenha(@PathVariable("senha") String senha) throws IOException {
 		Senha objSenha = senhaS.loadSenha(senha);
+		System.out.println();
 		return objSenha;
 	}
 
