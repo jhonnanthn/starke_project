@@ -39,6 +39,10 @@ public class SenhaDAO {
 		// subtrai as letras, verifica se é o ultimo (999) e então define o próximo nome
 		// (numeNovo)
 		if (!list.isEmpty()) {
+			Date lastDate = list.get(list.size()-1).getDataEntrada();
+			
+			if (lastDate.getDay() == new Date().getDay()) {
+			
 			String lastNome = list.get(list.size() - 1).getNome();
 			int n = Integer.parseInt(lastNome.substring(2)) + 1;
 			if (n > 999) {
@@ -46,6 +50,9 @@ public class SenhaDAO {
 			} else {
 				String nFormatado = String.format("%03d", n);
 				novoNome = idServico + nFormatado;
+			}
+			}else {
+				novoNome = idServico+"001";
 			}
 
 		} else {
